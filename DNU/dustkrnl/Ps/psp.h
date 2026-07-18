@@ -1,23 +1,13 @@
 #ifndef _PSP_
 #define _PSP_
 
-#pragma warning(disable:4054)   // Cast of function pointer to PVOID
-#pragma warning(disable:4055)   // Cast of function pointer
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4152)   // Casting function pointers
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4327)   // alignment on assignment
-#pragma warning(disable:4328)   // alignment on assignment
-
-#include "Include/dtos.h"
+#include "dtos.h"
 #include "Rtl/dtrtl.h"
 #include "Verifier/vfzwapi.h"
 #include "Ke/ki.h"
 
 #if defined (__x86_64__)
+#include "x64.h"
 #include "dust_vdm.h"
 #endif
 
