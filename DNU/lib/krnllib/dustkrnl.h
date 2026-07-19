@@ -23,7 +23,7 @@ typedef long long            LONG63;
 
 typedef unsigned long long  ULONG64;
 typedef unsigned long long  ULONGPTR;
-typedef void*               VOIDPTR;
+typedef void*               PVOID;
 
 /* Kernel System Types (Gaya ntoskrnl) */
 

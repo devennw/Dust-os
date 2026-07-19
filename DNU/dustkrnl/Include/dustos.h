@@ -3,6 +3,13 @@
 
 #include <dustkrnl.h>
 #include <dustrtl.h>
+#include "dtosdef.h"
+#include "exlevels.h"
+#include "exboosts.h"
+#include "bugcodes.h"
+#include "init.h"
+#include "v86emul.h"
+#include "procpowr.h"
 
 #if defined(__x86_64__)
 #include "x64.h"
@@ -44,6 +51,26 @@
 
 #define _DUSTDDK_
 
+/* Temp. Until we define a header file for types
+ * Outside of the kernel these are exported by reference */
+
 #ifdef _DUSTDRIVER_ 
+extern POBJECT_TYPE *
+extern POBJECT_TYPE *
+extern POBJECT_TYPE *
+extern POBJECT_TYPE *
+extern POBJECT_TYPE *
+extern POBJECT_TYPE *
+
+#else 
+
+extern POBJECT_TYPE *
+extern POBJECT_TYPE *
+extern POBJECT_TYPE *
+extern POBJECT_TYPE *
+extern POBJECT_TYPE *
+extern POBJECT_TYPE *
+
+#endif
 
 #ifdef _DUSTDRIVER_
