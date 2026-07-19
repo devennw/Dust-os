@@ -4,7 +4,7 @@
 #include "dustkrnl.h"
 #include "dustrtl.h"
 #include "dtosdef.h"
-#include 
+#include "dustkrnl.h" 
 
 #if defined(__x86_64__)
 #include "x64.h"
@@ -45,5 +45,7 @@
 #include "verifier.h"
 
 #define _DUSTDDK_
+
+#ifdef _DUSTDRIVER_ 
 
 #ifdef _DUSTDRIVER_

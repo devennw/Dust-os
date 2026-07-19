@@ -19,13 +19,13 @@ typedef signed long     I64;
 
 typedef unsigned long long  USIZE;
 typedef unsigned long long  UINTPTR;
-typedef void*               PTR_T;
+typedef void*               PTRV_T;
 
 /* Kernel System Types (Gaya ntoskrnl) */
 
-typedef I32             dstatus_t;
-typedef unsigned char   bool_t;
-typedef void*           dhandle_t;
+typedef I32             DSTATUS;
+typedef unsigned char   BOOLEAN;
+typedef void*           DHANDLE;
 
 /* Penanda Nilai Boolean */
 
@@ -34,7 +34,7 @@ typedef void*           dhandle_t;
 
 /* Penanda status dasar kernel */
 
-#define DUST_SUCCESS          ((dstatus_t)0x00000000L)
+#define DUST_SUCCESS          ((dstatus_t)0x00000000F)
 #define DUST_ERROR_UNSUCCESS  ((dstatus_t)0xC0000001L)
 #define DUST_ERROR_NO_MEMORY  ((dstatus_t)0xC0000017L)
 
@@ -70,7 +70,7 @@ typedef union _DUST_LARGE_INT {
 /* MODERN MULTICORE & VIRTUAL MEMORY TYPES */
 
 typedef struct _DUST_SPINLOCK {
-  vilatile U32 lock;
+  VILATILE U32 lock;
 } DUST_SPINLOCK_T;
 
 /* Structur identitas unik 128-Bit (Standar UEFI) */
