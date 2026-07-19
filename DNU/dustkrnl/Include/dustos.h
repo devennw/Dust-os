@@ -1,10 +1,8 @@
 #ifndef _DTOS_H
 #define _DTOS_H
 
-#include "dustkrnl.h"
-#include "dustrtl.h"
-#include "dtosdef.h"
-#include "dustkrnl.h" 
+#include <dustkrnl.h>
+#include <dustrtl.h>
 
 #if defined(__x86_64__)
 #include "x64.h"
