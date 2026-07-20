@@ -21,7 +21,7 @@
 #else
 #define DBGK_TRACE(x, ...)
     if (x && DbgkTraceLevel) {
-      dbgkPrint("%s [%.16s] - ",
+      DbgkPrint("%s [%.16s] - ",
           __FUNCTION__,
           psGetCurrentProcess()-> imageNameFile);
     }
