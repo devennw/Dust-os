@@ -43,7 +43,7 @@ typedef struct OBJECT_DEBUG {
   FMUTEX            mutex;
 
   // Queue of event waiting for debugging intervantion
-  DUST_LIST_ENTRY_T eventList;
+  LIST_ENTRY eventList;
 
   // Flags for the object
   U64               flags;
@@ -91,5 +91,22 @@ dbgkInisialize (
     );
 
 VOID
+dbgkCopyProcessDebugPort (
+    IN PEPROCESS targetProcess,
+    IN PEPROCESS sourceProcess
+    );
+
+DSTATUS
+dgbkOpenProcessDebugPort (
+    IN PEPROCESS targetProcess,
+    IN KPROCESSOR_MODE previousMode,
+    OUT HANDLE *PHANDLE
+    );
+
+DSTATUS
+dbgkClearProcessDebugObject (
+    IN PEPROCESS process,
+    IN PDEBUG_OBJECT sourceDebugObject
+    );
 
 #endif // !_DBGK_
