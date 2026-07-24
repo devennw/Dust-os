@@ -31,4 +31,65 @@
 #define DBGK_TRACE(x, fmt, ...) DPRINT (fmt, #__VA_AGRS__)
 #endif
 
+//
+//Object structure object debugging system
+//
+
+typedef struct OBJECT_DEBUG {
+  // Event thats set when the EventList is populated.
+  KEVENT            eventPresent;
+
+  // Mutex into project structure
+  FMUTEX            mutex;
+
+  // Queue of event waiting for debugging intervantion
+  DUST_LIST_ENTRY_T eventList;
+
+  // Flags for the object
+  U64               flags;
+} DEBUG_OBJECT, *PDEBUG_OBJECT;
+
+VOID
+dbgkCreateThread(
+    PETHREAD      Thread,
+    PVOID         startAddress
+    );
+
+VOID 
+dbgkExitThread(
+    DSTATUS       exitStatus
+    );
+
+VOID 
+dbgkExitProcess(
+    DSTATUS       exitStatus
+    );
+
+VOID
+dbgkMapViewSection(
+    IN DHANDLE    sectionHandle,
+    IN PVOID      baseAddress,
+    IN U64        sectionOffset,
+    IN ULONGPTR   viewSize
+    );
+
+VOID
+dbgkUnMapViewSection(
+    IN PVOID      baseAddress
+    );
+
+BOOLEAN
+dbgkForwardException (
+    IN PEXCEPTION_RECORD  exceptionRecord,
+    IN BOOLEAN   debugException,
+    IN BOOLEAN   secondChange
+    );
+
+DSTATUS
+dbgkInisialize (
+    VOID
+    );
+
+VOID
+
 #endif // !_DBGK_

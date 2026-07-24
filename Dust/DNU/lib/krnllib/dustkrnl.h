@@ -43,6 +43,12 @@ typedef ULONG64             DUSTAPI;
 #define TRUE  1
 #define FALSE 0
 
+/* Macro decoration like windows nt */
+
+#define IN
+#define OUT
+#define OPTIONAL  
+
 /* Penanda status dasar kernel */
 
 #define DUST_SUCCESS          ((dstatus_t)0x00000000F)
