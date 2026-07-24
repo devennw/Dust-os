@@ -1,130 +1,87 @@
 #ifndef _DUSTKRNL_H_
 #define _DUSTKRNL_H_
 
-/* Primitive Fixed-Width Integers */
-
-typedef unsigned char        U8;
-typedef signed char          I8;
-
-typedef unsigned short       U16;
-typedef signed short         I16;
-
-typedef unsigned int         U32;
-typedef signed int           I32;
-
-typedef unsigned long        U64;
-typedef signed long          I64;
-
-typedef short                S16;
-typedef int                  S32;
-typedef long long            LONG63;
-
-/* Memory and Architecture types (khusus x64) */
-
-typedef unsigned long long  ULONG64;
-typedef unsigned long long  ULONGPTR;
-typedef void*               PVOID;
-
-/* Kernel System Types (Gaya ntoskrnl) */
-
-typedef I32                 DSTATUS;
-typedef unsigned char       BOOLEAN;
-typedef void*               DHANDLE;
-
-/* DNU set  */
-
-#ifndef _DNU
-typedef U64                 VOID;
-typedef ULONG64             DUSTAPI;
-#endif
-
-/* Penanda Nilai Boolean */
-
-#define TRUE  1
-#define FALSE 0
-
-/* Macro decoration like windows nt */
+//============================================
+// 1. MACRO ANNOTATION AND SYSTEM DEFINITIONS
+//============================================
 
 #define IN
 #define OUT
-#define OPTIONAL  
+#define OPTIONAL
 
-/* Penanda status dasar kernel */
+#ifndef NULL
+#define NULL ((void*)0)
+#endif
 
-#define DUST_SUCCESS          ((dstatus_t)0x00000000F)
-#define DUST_ERROR_UNSUCCESS  ((dstatus_t)0xC0000001L)
-#define DUST_ERROR_NO_MEMORY  ((dstatus_t)0xC0000017L)
+//============================================
+// 2. NT-STYLE PRIMITIVE TYPES AND POINTERS
+//============================================
 
-//========================================================
-// STRUCTUR FOR KERNEL FUNCTION
-//========================================================
+typedef void          VOID;
+typedef void*         PVOID;
+typedef const void*   PCVOID;
 
-/* Sturctur string kustom */
+typedef unsigned long long  ULONGPTR;
+typedef unsigned long       U64;
+typedef unsigned int        U32;
+typedef unsigned short      U16;
+typedef unsigned char       U8;
 
-typedef struct _DUST_STRING {
-  U16   length;
-  U16   maximum_length;
-  char* buffer;
-} DUST_STRING_T;
+typedef signed long         I64;
+typedef signed int          I32;
+typedef signed short        I16;
+typedef signed char         I8;
 
-/* Structur antrean dua arah (Doubly linked list) */
+typedef char                S8;
+typedef short               S16;
+typedef int                 S32;
+typedef long long           S64;
 
-typedef struct _DUST_LIST_ENTRY {
-  struct _dust_list_entry*   next;
-  struct _dust_list_entry*   prev;
-} DUST_LIST_ENTRY_T;
 
-/* Structur manipulasi angka raksasa / waktu */
+typedef unsigned char       BOOLEAN;
 
-typedef union _DUST_LARGE_INT {
-  struct {
-    U32   low_part;
-    I32   high_part;
-  } split;
-  I64     quad_part;
-} DUST_LARGE_INT_T;
+#ifndef _DNU
+  typedef U64               size_t;
+#endif
 
-/* MODERN MULTICORE & VIRTUAL MEMORY TYPES */
+// Handle and status
 
-typedef struct _DUST_SPINLOCK {
-  VILATILE U32  lock;
-} DUST_SPINLOCK_T;
+typedef PVOID               HANDLE;
+typedef I32                 DSTATUS;
 
-/* Structur identitas unik 128-Bit (Standar UEFI) */
+//============================================
+// 3. KERNEL STATUS RETURN CODES
+//============================================
 
-typedef struct _DUST_GUID {
-  U32   data1;
-  U16   data2;
-  U16   data3;
-  U8    data4[8];
-} DUST_GUID_T;
+#define DSTATUS_SUCCESS                ((DSTATUS)0x00000000L)
+#define DSTATUS_UNSECCESFUL            ((DSTATUS)0xC0000001L)
+#define DSTATUS_NOT_IMPLEMETED         ((DSTATUS)0xC0000002L)
+#define DSTATUS_INVALID_PARAMETER      ((DSTATUS)0xC000000DL)
+#define DSTATUS_ACCESS_DENIED          ((DSTATUS)0x00000022l)
+#define DSTATUS_INSFULLCIENT_RESOURCES ((DSTATUS)0x0000009Al)
 
-/* Structur untuk menyimpan isi jantung CPU x64 saat multitasking */
+//============================================
+// 4. FORWARD DUST OS STRUCTURES
+//============================================
 
-typedef struct _DUST_CONTEXT {
+typedef struct _EXCEPTION_RECORD {
+  U32 exceptionCode;
+  U32 exceptionFlags;
+  struct _EXCEPTION_RECORD* ExceptionRecord;
+  PVOID exceptionAddres;
+  U32 numberParameters;
+  ULONGPTR exceptionInformation[15];
+} EXCEPTION_RECORD, *PEXCEPTION_RECORD;
 
-  // Register Umum (Geneal purpuse register x64)
-  U64 R15, R14, R13, R12, R11, R10, R9, R8;
-  U64 rbp, rdi, rsi, rdx, rcx, rbx, rax;
+struct _EPROCESS;
+typedef struct _EPROCESS EPROCESS, *PEPROCESS ;
 
-  // Register khusus saat terjadi interupsi hardware
-  U64 interrupt_number;
-  U64 error_code;
+struct _ETHREAD;
+typedef struct _ETHREAD ETHREAD, *PETHREAD;
 
-  // Register otomatis yang dijatuhkan oleh silikon cpu x64
-  U64 rip;
-  U64 cs;
-  U64 rflag;
-  U64 rsp;
-  U64 ss;
-} DUST_CONTEXT_T;
-
-typedef U64 DUST_PTE_T;
-#define DUST_PTE_PRESENT  (1NULL << 0)
-#define DUST_PTE_WRITABLE (1NULL << 1)
-#define DUST_PTE_USER     (1NULL << 2)
-
-/* Pointer set for memory allocator menegement */
+//=============================================
+// 5. MEMORY SET OPTIMIZED DUST OS
+//=============================================
 
 #define offsetof(x,y) FIELD_OFFSET(x,y)
 #define nil (0)
@@ -134,15 +91,49 @@ typedef U64 DUST_PTE_T;
 int readn(void *fd, char *buf, U64 len);
 int seek(void *fd, U64 off, int mode);
 
-void *RosSymAllocMemZero(U64 num, U64 size);
-void *RosSymRealloc(void *mem, U64 newsize);
+void *AllocMemZero(U64 num, U64 size);
+void *Realloc(void *mem, U64 newsize);
 void xfree(void *v);
 
 #define werrstr(str, ...) DPRINT(str "\n" ,##__VA_ARGS__)
-#define malloc(x)       DustSymAllocMem(x)
-#define mallocz(x,y)    DustSymAllocMemZero(x,y)
-#define free(x)         xfree(x)
-#define USED(x)         (*((char *)&(x)) ^= 0)
-#define memset(x,y,z)   RtlZeroMemory(x,z)
+#define malloc(x) AllocMem(x)
+#define mallocz(x,y) AllocMemZero(x,y)
+#define free(x) xfree(x)
+#define USED(x) (*((char *)&(x)) ^= 0)
+#define memset(x,y,z) RtlZeroMemory(x,z)
 
-#endif // _DUSTKRNL_H_
+//==============================================
+// 6. ADVANCE DUST OS STRUCTURES
+//==============================================
+
+typedef struct _DUST_STR {
+  U16 length;
+  U16 maximumLength;
+  char* buffer;
+} DUST_STR;
+
+typedef struct _LIST_ENTRY {
+  struct _LIST_ENTRY* next;
+  struct _LIST_ENTRY* prev;
+} LIST_ENTRY;
+
+typedef union _LARGE_INTEGER {
+  struct {
+    U32 lowPart;
+    I32 highPart;
+  }
+  I64 quadPart;
+} LARGE_INTEGER;
+
+typedef struct _DUST_SPINLOCK {
+  volatile U32 lock;
+} DUST_SPINLOCK;
+
+typedef struct _DUST_GUID {
+  U32 data1;
+  U16 data2;
+  U16 data3;
+  U8 data4[8];
+} DUST_GUID;
+
+#endif // !_DUSTKRNL_H_
