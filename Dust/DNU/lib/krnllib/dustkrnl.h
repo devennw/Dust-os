@@ -121,7 +121,7 @@ typedef union _LARGE_INTEGER {
   struct {
     U32 lowPart;
     I32 highPart;
-  }
+  };
   I64 quadPart;
 } LARGE_INTEGER;
 
