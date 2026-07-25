@@ -1,6 +1,8 @@
 #ifndef _DUSTKRNL_H_
 #define _DUSTKRNL_H_
 
+#include <stdint.h>
+
 //============================================
 // 1. MACRO ANNOTATION AND SYSTEM DEFINITIONS
 //============================================
@@ -30,7 +32,8 @@ typedef void*         PVOID;
 typedef const void*   PCVOID;
 
 typedef unsigned long long  ULONGPTR;
-typedef unsigned long       U64;
+
+typedef unsigned long long  U64;
 typedef unsigned int        U32;
 typedef unsigned short      U16;
 typedef unsigned char       U8;
@@ -45,12 +48,23 @@ typedef short               S16;
 typedef int                 S32;
 typedef long long           S64;
 
+typedef uint64_t            ULONGLONG;
+typedef uint32_t            ULONG;
+typedef uint16_t            USHORT;
+typedef uint8_t             UCHAR;
+
+typedef int64_t             ILONG64;
+typedef int32_t             IINT;
+typedef int16_t             ISHORT;
+typedef int8_t              ICHAR;
+
 
 typedef unsigned char       BOOLEAN;
 
 // Handle and status
 
 typedef PVOID               HANDLE;
+typedef PVOID               DHANDLE;
 typedef I32                 DSTATUS;
 
 //============================================
