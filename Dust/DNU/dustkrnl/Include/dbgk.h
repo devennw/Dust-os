@@ -55,7 +55,7 @@ dbgkCreateThread(
     PVOID         startAddress
     );
 
-VOID 
+VOID
 dbgkExitThread(
     DSTATUS       exitStatus
     );
