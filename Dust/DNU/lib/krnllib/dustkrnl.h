@@ -5,9 +5,17 @@
 // 1. MACRO ANNOTATION AND SYSTEM DEFINITIONS
 //============================================
 
+#define DAPI
+#define DUSTAPI
+
 #define IN
 #define OUT
 #define OPTIONAL
+
+#define FALSE   0
+#define TRUE    1
+
+#define ANYSIZE_ARRAY   1
 
 #ifndef NULL
 #define NULL ((void*)0)
@@ -39,10 +47,6 @@ typedef long long           S64;
 
 
 typedef unsigned char       BOOLEAN;
-
-#ifndef _DNU
-  typedef U64               size_t;
-#endif
 
 // Handle and status
 
@@ -109,7 +113,7 @@ void xfree(void *v);
 typedef struct _DUST_STR {
   U16 length;
   U16 maximumLength;
-  char* buffer;
+char* buffer;
 } DUST_STR;
 
 typedef struct _LIST_ENTRY {
