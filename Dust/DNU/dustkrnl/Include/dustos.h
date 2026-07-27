@@ -1,5 +1,5 @@
-#ifndef _DTOS_H
-#define _DTOS_H
+#ifndef _DUSTOS_H_
+#define _DUSTOS_H_
 
 #include <dustkrnl.h>
 #include <dustrtl.h>
@@ -55,21 +55,21 @@
  * Outside of the kernel these are exported by reference */
 
 #ifdef _DUSTDRIVER_ 
-extern POBJECT_TYPE *
-extern POBJECT_TYPE *
-extern POBJECT_TYPE *
-extern POBJECT_TYPE *
-extern POBJECT_TYPE *
-extern POBJECT_TYPE *
+extern POBJECT_TYPE *ExEventPairObjectTypes;
+extern POBJECT_TYPE *PsProcessTypes;
+extern POBJECT_TYPE *PsThreadTypes;
+extern POBJECT_TYPE *PsJobTypes;
+extern POBJECT_TYPE *LpcPortObjectTypes;
+extern POBJECT_TYPE *LpcWaitablePortObjectTypes;
 
 #else 
 
-extern POBJECT_TYPE *
-extern POBJECT_TYPE *
-extern POBJECT_TYPE *
-extern POBJECT_TYPE *
-extern POBJECT_TYPE *
-extern POBJECT_TYPE *
+extern POBJECT_TYPE ExEventPairObjectTypes;
+extern POBJECT_TYPE PsProcessTypes;
+extern POBJECT_TYPE PsThreadTypes;
+extern POBJECT_TYPE PsJobTypes;
+extern POBJECT_TYPE LpcPortObjectTypes;
+extern POBJECT_TYPE LpcWaitablePortObjectTypes;
 
 #endif
 
