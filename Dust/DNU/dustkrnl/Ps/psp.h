@@ -134,3 +134,46 @@ typedef struct _SYSTEM_DSA {
     EX_PUSH_LOCK dsaLock;
 } SYSTEM_DSA, *PSYSTEM_DSA;
 
+typedef struct _JOB_WORKING_SET_CHANGE_HEAD {
+    LIST_ENTRY links;
+    KGUARD_MUTEX lock;
+    SIZE_T minimumWorkingSetSize;
+    SIZE_T maximumWorkingSetSize;
+} JOB_WORKING_SET_CHANGE_HEAD, *PJOB_WORKING_SET_CHANGE_HEAD;
+
+typedef struct _JOB_WORKING_SET_CHANGE_RECORD {
+    LIST_ENTRY links;
+    PEPROCESS process;
+} JOB_WORKING_SET_CHANGE_RECORD, *PJOB_WORKING_SET_CHANGE_RECORD;
+JOB_WORKING_SET_CHANGE_HEAD* PspGetJobWorkingSetChangeHead(PEPROCESS Process);
+
+typedef struct _PRIVILAGE_CHECK_CONTEXT {
+    SECURITY_SUBJECT_CONTEXT SubjectContext;
+    PEPROCESS Process;
+    PRIVILEGE_SET requiredPrivileges;
+    PETHREAD Thread;
+    KPROCESSOR_MODE PreviousMode;
+    ULONG PrivilegeCount;
+    BOOLEAN AccessGranted;
+} PRIVILAGE_CHECK_CONTEXT, *PPRIVILAGE_CHECK_CONTEXT;
+
+LOGICAL
+PspCheckPrivilege(
+    IN LUID PrivilegeVl,
+    IN KPROCESSOR_MODE PreviousMode,
+    OUT PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext
+    );
+
+VOID
+PspSinglePrivilegeCheckAudit (
+    IN LOGICAL privUsed,
+    IN PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext
+    );
+
+// Private Entry Point for Object Dumping
+
+VOID
+PspProcessDump (
+    IN PVOID object,
+    IN POB_DUMP_CONTROL control OPTIONAL
+    );
