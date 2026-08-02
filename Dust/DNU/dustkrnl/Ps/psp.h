@@ -95,7 +95,7 @@ PspGetTrapFrame(
         initialStack = stackControl->Previous.initialStack;
         stackControl = (PKERNEL_STACK_CONTROL)initialStack;
     } while (stackControl->Previous.stackBase != NULL);
-    
+
     return (PK_TRAP_FRAME)(initialStack + sizeof(KERNEL_STACK_CONTROL));
 }
 
@@ -103,7 +103,7 @@ PspGetTrapFrame(
 
 #elif defined(_X86_)
 
-#define PspGetBaseTrapFrame(Thread) (PKTRAP_FRAME)((ULONG_PTR)Thread->Tcb.initialStack - \
+#define PspGetBaseTrapFrame(thread) (PKTRAP_FRAME)((ULONG_PTR)Thread->Tcb.initialStack - \
                                                    PSPALIGN_UP(sizeof(KTRAP_FRAME),KTRAP_FRAME_ALIGN) - \
                                                    sizeof(FX_SAVE_AREA))
 #define PspGetBaseExceptionFrame(thread)    (NULL)
@@ -111,12 +111,13 @@ PspGetTrapFrame(
 #elif defined(_ARM64_)
 
 #define PspGetBaseTrapFrame(Thread) (PKTRAP_FRAME)((ULONG_PTR)Thread->Tcb.initialStack - \
-                                                   PSPALIGN_UP(sizeof(KTRAP_FRAME),KTRAP_FRAME_ALIGN))
+                                                   PSPALIGN_UP(sizeof(KTRAP_FRAME),KTRAP_FRAME_ALIGN) - \
+                                                   sizeof(FX_SAVE_AREA))
 
 #define PspGetBaseExceptionFrame(thread)    (NULL)
 
 #else
-#error "Unsupported architecture"
+#error "Unsupported architecture for Dust"
 #endif // defined(_AMD64_)
 
 typedef struct _GET_SET_CONTEXT {
@@ -159,21 +160,135 @@ typedef struct _PRIVILAGE_CHECK_CONTEXT {
 
 LOGICAL
 PspCheckPrivilege(
-    IN LUID PrivilegeVl,
-    IN KPROCESSOR_MODE PreviousMode,
-    OUT PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext
-    );
+  IN LUID PrivilegeVl,
+  IN KPROCESSOR_MODE PreviousMode,
+  OUT PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext
+  );
 
 VOID
 PspSinglePrivilegeCheckAudit (
-    IN LOGICAL privUsed,
-    IN PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext
-    );
+  IN LOGICAL privUsed,
+  IN PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext
+  );
 
 // Private Entry Point for Object Dumping
 
 VOID
 PspProcessDump (
-    IN PVOID object,
-    IN POB_DUMP_CONTROL control OPTIONAL
+  IN PVOID object,
+  IN POB_DUMP_CONTROL control OPTIONAL
+  );
+
+VOID
+PspProcessDelete (
+  IN PVOID object
+  );
+
+VOID
+PspProcessDeleteDump (
+  VOID
+  );
+
+VOID
+PspThreadProcessDump (
+  IN PVOID object,
+  IN POB_DUMP_CONTROL control OPTIONAL,
+  IN PETHREAD thread OPTIONAL
     );
+
+VOID
+PspInheritQuotaLimits (
+  IN PEPROCESS newProcess,
+  IN PEPROCESS parentProcess
+  );
+
+VOID
+PspDeferenceQuotaLimits (
+  IN PEPROCESS process
+  );
+
+VOID
+PspThreadDelete (
+  IN PVOID object,
+  IN PETHREAD objectThread
+    );
+
+DUSTSTATUS
+PspWriteTabImpersonationInfo (
+  IN PETHREAD thread,
+  IN PEPROCESS process,
+  IN PVOID impersonationInfo,
+  IN ULONG impersonationInfoSize,
+  OUT ULONGPTR bytesWritten
+  );
+
+// Initialization loader entry point for the process and thread subsystems
+
+DUSTSTATUS
+PspInitializeProcessSubsystem (
+  IN PVOID dsaBase
+  );
+
+VOID
+PspInitializeThreadSubsystem (
+  IN PVOID dsaBase,
+  IN PETHREAD thread
+  );
+
+ULONG
+PspGetProcessSessionId (
+  IN PEPROCESS process,
+  OUT ULONGPTR sessionId
+  );
+
+ULONG
+PspGetProcessSessionIdEx (
+  IN PEPROCESS process,
+  );
+
+// initialization and loader enrty point
+
+BOOLEAN
+PspLoaderInitializeProcess (
+  IN PLOADER_PARAMETER_BLOCK LoaderBlock,
+  IN PEPROCESS process,
+  IN PVOID pebAddress,
+  IN PVOID *processParameters,
+  );
+
+BOOLEAN
+PspLoaderInitPhase0 (
+  IN PLOADER_PARAMETER_BLOCK loaderBlock
+  );
+
+BOOLEAN
+PspLoaderInitPhase1 (
+  IN PLOADER_PARAMETER_BLOCK loaderBlock
+  );
+
+DUSTSTATUS
+PspInitializeSystemDsa (
+  VOID
+  );
+
+DUSTSTATUS
+PspInitiasizeSystemDsaEntryPoint (
+  IN PSZ entryPointName,
+  IN PVOID *entryPointAddress
+  );
+
+DUSTSTATUS
+PspLookupKernelEntryPoint (
+  VOID
+  );
+
+USHORT
+PspNameForOrdinal (
+  IN PSZ entryPoint,
+  IN ULONG dsaBase,
+  IN ULONG numberToName,
+  IN PULONG nameTableBase,
+  IN PUSHORT ordinalNumber
+  );
+
+#endif // _PSP_
