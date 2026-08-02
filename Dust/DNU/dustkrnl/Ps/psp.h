@@ -110,7 +110,7 @@ PspGetTrapFrame(
 
 #elif defined(_ARM64_)
 
-#define PspGetBaseTrapFrame(Thread) (PKTRAP_FRAME)((ULONG_PTR)Thread->Tcb.initialStack - \
+#define PspGetBaseTrapFrame(thread) (PKTRAP_FRAME)((ULONG_PTR)Thread->Tcb.initialStack - \
                                                    PSPALIGN_UP(sizeof(KTRAP_FRAME),KTRAP_FRAME_ALIGN) - \
                                                    sizeof(FX_SAVE_AREA))
 
