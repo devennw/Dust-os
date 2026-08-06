@@ -60,16 +60,26 @@ dbgkExitThread(
     DSTATUS       exitStatus
     );
 
+<<<<<<< HEAD
 VOID 
+=======
+VOID
+>>>>>>> bcf5526 (adding files via commition)
 dbgkExitProcess(
     DSTATUS       exitStatus
     );
 
 VOID
 dbgkMapViewSection(
+<<<<<<< HEAD
     IN DHANDLE    sectionHandle,
     IN PVOID      baseAddress,
     IN U64        sectionOffset,
+=======
+    IN HANDLE     sectionHandle,
+    IN PVOID      baseAddress,
+    IN ULONG      sectionOffset,
+>>>>>>> bcf5526 (adding files via commition)
     IN ULONGPTR   viewSize
     );
 

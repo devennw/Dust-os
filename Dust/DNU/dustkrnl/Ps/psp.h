@@ -34,6 +34,14 @@
 #include <dustvdm_arm64.h>
 #endif
 
+<<<<<<< HEAD
+=======
+#define NOAPIEXT
+#include "ddbgext.h"
+#include "dustdbg.h"
+#include <string.h>
+
+>>>>>>> bcf5526 (adding files via commition)
 //
 // working set watcher is 16 kb. this lets us have a 4k page
 // for the working set watcher and 12k for the stack.
@@ -291,4 +299,22 @@ PspNameForOrdinal (
   IN PUSHORT ordinalNumber
   );
 
+<<<<<<< HEAD
+=======
+USHORT
+PspOrdinalEntryPoint (
+  IN PVOID ordinalEntryPoint,
+  IN PUSHORT ordinalNumber,
+  IN PULONG nameTableBase
+  );
+
+/* Internal Creation Function */
+
+DUSTSTATUS
+PspCreateProcess (
+  OUT PHANDLE processHandle,
+  IN
+)
+
+>>>>>>> bcf5526 (adding files via commition)
 #endif // _PSP_

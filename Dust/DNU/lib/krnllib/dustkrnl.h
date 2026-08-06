@@ -6,10 +6,35 @@
 #include <limits.h>
 #include <assert.h>
 
+<<<<<<< HEAD
+=======
+/*  Function attributes for clang */
+#if !defined(__clang__) && !defined(__fastcall)
+#define __fastcall __atributes__((fastcall))
+#endif
+#if !defined(__clang__) && !defined(__callback)
+#define __callback __atributes__((callback))
+#endif
+#if !defined(__clang__) && !defined(__cdecl)
+#define __cdecl __atributes__((cdecl))
+#if !defined(__clang__) && !defined(__stdcall)
+#define __stdcall __atributes__((stdcall))
+
+>>>>>>> bcf5526 (adding files via commition)
 //============================================
 // 1. MACRO ANNOTATION AND SYSTEM DEFINITIONS
 //============================================
 
+<<<<<<< HEAD
+=======
+#define UNIMPLEMENTED { printf("%s unimplemented\n", __FUNCTION__); exit(1); }
+#define UNIMPLEMENTED_ONCE { printf("%s unimplemented\n", __FUNCTION__); exit(1); }
+#define ASSERT(x) assert(x)
+#define ASSERTMSG(m, x) assert(x)
+#define DPRINT if (0) printf
+#define DPRINT1 printf
+
+>>>>>>> bcf5526 (adding files via commition)
 #define DAPI
 #define DUSTAPI
 
@@ -34,7 +59,11 @@ typedef void VOID, *PVOID, *LPVOID;
 typedef char CHAR, CCHAR, *PCHAR, *PSTR, *LPSTR;
 typedef const char *PCSTR, *LPCSTR;
 typedef unsigned char UCHAR, *PUCHAR, BYTE, *LPBYTE, BOOLEAN, *PBOOLEAN;
+<<<<<<< HEAD
 typedef uint8_t UINT8;
+=======
+typedef uint8_t UCHAR, *PUCHAR, BOOLEAN, UINT8;
+>>>>>>> bcf5526 (adding files via commition)
 typedef int16_t SHORT, *PSHORT;
 typedef uint16_t USHORT, *PUSHORT, WORD, *PWORD, *LPWORD, WCHAR, *PWCHAR, *PWSTR, *LPWSTR, UINT16;
 typedef const uint16_t *PCWSTR, *LPCWSTR;
@@ -55,12 +84,20 @@ typedef double DOUBLE;
 
 // Handle and status
 
+<<<<<<< HEAD
 typedef PVOID HANDLE;
+=======
+typedef PVOID PHANDLE;
+>>>>>>> bcf5526 (adding files via commition)
 #ifndef _HAVE_HKEY
 typedef HANDLE HKEY, *PHKEY;
 #endif
 typedef HANDLE HMODULE, HINSTANCE;
+<<<<<<< HEAD
 typedef INT NTSTATUS, POOL_TYPE;
+=======
+typedef INT DUSTSTATUS, POOL_TYPE;
+>>>>>>> bcf5526 (adding files via commition)
 typedef LONG HRESULT;
 typedef ULONGPTR SIZE_T, *PSIZE_T;
 typedef WORD LANGID;
@@ -125,9 +162,15 @@ void xfree(void *v);
 //==============================================
 
 typedef struct _DUST_STR {
+<<<<<<< HEAD
   U16 length;
   U16 maximumLength;
 char* buffer;
+=======
+  USHORT length;
+  USHORT maximumLength;
+  char* buffer;
+>>>>>>> bcf5526 (adding files via commition)
 } DUST_STR;
 
 typedef struct _LIST_ENTRY {
@@ -137,10 +180,17 @@ typedef struct _LIST_ENTRY {
 
 typedef union _LARGE_INTEGER {
   struct {
+<<<<<<< HEAD
     U32 lowPart;
     I32 highPart;
   };
   I64 quadPart;
+=======
+    ULONG lowPart;
+    LONG highPart;
+  };
+  LONGLONG quadPart;
+>>>>>>> bcf5526 (adding files via commition)
 } LARGE_INTEGER;
 
 typedef struct _DUST_SPINLOCK {
@@ -148,10 +198,17 @@ typedef struct _DUST_SPINLOCK {
 } DUST_SPINLOCK;
 
 typedef struct _DUST_GUID {
+<<<<<<< HEAD
   U32 data1;
   U16 data2;
   U16 data3;
   U8 data4[8];
+=======
+  ULONG data1;
+  USHORT data2;
+  USHORT data3;
+  UCHAR data4[8];
+>>>>>>> bcf5526 (adding files via commition)
 } DUST_GUID;
 
 #ifndef _HAVE_RTL_BITMAP
@@ -342,4 +399,8 @@ typedef const UNICODE_STRING *PCUNICODE_STRING;
 #define __INTERNAL_DEBUG
 #define RTL_H
 
+<<<<<<< HEAD
 #endif // !_DUSTKRNL_H_
+=======
+#endif // !_DUSTKRNL_H_s
+>>>>>>> bcf5526 (adding files via commition)
