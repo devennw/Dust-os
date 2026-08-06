@@ -34,14 +34,11 @@
 #include <dustvdm_arm64.h>
 #endif
 
-<<<<<<< HEAD
-=======
 #define NOAPIEXT
 #include "ddbgext.h"
 #include "dustdbg.h"
 #include <string.h>
 
->>>>>>> bcf5526 (adding files via commition)
 //
 // working set watcher is 16 kb. this lets us have a 4k page
 // for the working set watcher and 12k for the stack.
@@ -299,8 +296,6 @@ PspNameForOrdinal (
   IN PUSHORT ordinalNumber
   );
 
-<<<<<<< HEAD
-=======
 USHORT
 PspOrdinalEntryPoint (
   IN PVOID ordinalEntryPoint,
@@ -313,8 +308,62 @@ PspOrdinalEntryPoint (
 DUSTSTATUS
 PspCreateProcess (
   OUT PHANDLE processHandle,
-  IN
-)
+  IN  ACCSES_MASK accsessDesired,
+  IN  POBJECT_ATTRIBUTES objectAttributes,
+  IN  HANDLE parentProcess,
+  IN  ULONG flags,
+  IN  HANDLE sectionHandle OPTIONAL,
+  IN  HANDLE debugPort OPTIONAL,
+  IN  HANDLE exceptionPort,
+  IN  ULONG jobMemberLevel
+  );
 
->>>>>>> bcf5526 (adding files via commition)
+#define PSP_CREATE_MAX_PROCESS_NOTIFY 12
+#define PSP_CREATE_MIN_PROCESS_NOTIFY 6
+
+//
+// Define process callouts. These are of type PCREATE_PROCESS_NOTIFY_ROUTINE
+// Called on process create and delete.
+//
+ULONG
+PspCreateProcessNotifyRoutineCount;
+
+EX_CALLBACK
+PspCreateProcessNotifyRoutine[PSP_MAX_CREATE_PROCESS_NOTIFY];
+
+#define PSP_LOAD_MAX_IMAGE_NOTIFY 12
+
+//
+// Define process callouts. These are of type PCREATE_PROCESS_NOTIFY_ROUTINE
+// Called on process create and delete.
+//
+ULONG
+PspCreateMinProcessNotifyRoutineCount;
+
+EX_CALLBACK
+PspCreateMinProcessNotifyRoutineCount[PSP_CREATE_MIN_PROCESS_NOTIFY]
+
+#define PSP_LOAD_MIN_IMAGE_NOTIFY 6
+
+//
+// Define image load callbacks. These are of type PLOAD_IMAGE_NOTIFY_ROUTINE
+// Called on image load.
+//
+
+ULONG
+PspLoadImageNotifyRoutineCount;
+
+ULONG
+PspLoadMinImageNotifyRoutineCount;
+
+EX_CALLBACK
+PspLoadImageNotifyRoutine[PSP_LOAD_MAX_IMAGE_NOTIFY];
+
+EX_CALLBACK
+PspLoadMinImageNotifyRoutine[PSP_LOAD_MIN_IMAGE_NOTIFY];
+
+/*++
+--*/
+
+
 #endif // _PSP_
