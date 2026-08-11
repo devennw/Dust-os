@@ -362,6 +362,7 @@ PspLoadImageNotifyRoutine[PSP_LOAD_MAX_IMAGE_NOTIFY];
 EX_CALLBACK
 PspLoadMinImageNotifyRoutine[PSP_LOAD_MIN_IMAGE_NOTIFY];
 
+<<<<<<< HEAD
 
 DUSTSTATUS
 PspCreatethread(
@@ -396,6 +397,10 @@ VOID
 PspReaper(
     IN PVOID startContext
     );
+=======
+/*++
+--*/
+>>>>>>> 820267b09b34a2ac0b1207f7605b78c7a767e504
 
 
 #endif // _PSP_
