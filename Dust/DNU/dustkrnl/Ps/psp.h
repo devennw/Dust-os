@@ -402,5 +402,15 @@ PspReaper(
 --*/
 >>>>>>> 820267b09b34a2ac0b1207f7605b78c7a767e504
 
+VOID
+PspThreadStartup(
+    __out HANDLE threadProcess,
+    __in PETHREAD thread,
+    __in PVOID startContext,
+    __in PKSTART_ROUTINE startRoutine,
+    __out PCONTEXT threadContext OPTIONAL,
+    __in ULONG threadStart OPTIONAL
+    );
+
 
 #endif // _PSP_
