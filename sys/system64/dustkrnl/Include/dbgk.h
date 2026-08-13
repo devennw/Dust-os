@@ -60,26 +60,19 @@ dbgkExitThread(
     DSTATUS       exitStatus
     );
 
-<<<<<<< HEAD
-VOID 
-=======
 VOID
->>>>>>> bcf5526 (adding files via commition)
 dbgkExitProcess(
     DSTATUS       exitStatus
     );
 
 VOID
 dbgkMapViewSection(
-<<<<<<< HEAD
     IN DHANDLE    sectionHandle,
     IN PVOID      baseAddress,
     IN U64        sectionOffset,
-=======
     IN HANDLE     sectionHandle,
     IN PVOID      baseAddress,
     IN ULONG      sectionOffset,
->>>>>>> bcf5526 (adding files via commition)
     IN ULONGPTR   viewSize
     );
 
@@ -95,7 +88,7 @@ dbgkForwardException (
     IN BOOLEAN   secondChange
     );
 
-DSTATUS
+DUSTSTATUS
 dbgkInisialize (
     VOID
     );
@@ -106,17 +99,25 @@ dbgkCopyProcessDebugPort (
     IN PEPROCESS sourceProcess
     );
 
-DSTATUS
+DUSTSTATUS
 dgbkOpenProcessDebugPort (
     IN PEPROCESS targetProcess,
     IN KPROCESSOR_MODE previousMode,
     OUT HANDLE *PHANDLE
     );
 
-DSTATUS
+DUSTSTATUS
 dbgkClearProcessDebugObject (
     IN PEPROCESS process,
     IN PDEBUG_OBJECT sourceDebugObject
+    );
+
+DUSTSTATUS
+dbgkExceptionObject(
+    IN PEXCEPTION_RECORD exceptionRecord,
+    IN BOOLEAN debugException,
+    IN BOOLEAN secondChange,
+    IN USHORT objectException
     );
 
 #endif // !_DBGK_

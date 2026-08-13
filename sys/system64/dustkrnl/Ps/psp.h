@@ -362,8 +362,6 @@ PspLoadImageNotifyRoutine[PSP_LOAD_MAX_IMAGE_NOTIFY];
 EX_CALLBACK
 PspLoadMinImageNotifyRoutine[PSP_LOAD_MIN_IMAGE_NOTIFY];
 
-<<<<<<< HEAD
-
 DUSTSTATUS
 PspCreatethread(
     OUT PHANDLE ThreadHandle,
@@ -397,10 +395,9 @@ VOID
 PspReaper(
     IN PVOID startContext
     );
-=======
+
 /*++
 --*/
->>>>>>> 820267b09b34a2ac0b1207f7605b78c7a767e504
 
 VOID
 PspThreadStartup(
@@ -412,5 +409,37 @@ PspThreadStartup(
     __in ULONG threadStart OPTIONAL
     );
 
+VOID
+PspThreadUserStartup(
+    __in PKSTART_ROUTINE startRoutine,
+    __in PVOID startContext,
+    __in PETHREAD threadStartup,
+    __in DUSTSTATUS userStartup
+    );
+
+DUSTSTATUS
+PspThreadRunning(
+    IN PETHREAD thread,
+    IN PHANDLE threadHandle,
+    IN DUSTSTATUS systemStartup,
+    OUT PETHREAD *threadPointer OPTIONAL
+    );
+
+/* system inialize runtime */
+
+VOID
+PspRuntimeInialize(
+    IN PVOID priviousMode,
+    IN HANLDE runtimeHandle,
+    OUT DUSTSTATUS systemStartup OPTIONAL,
+    IN PETHREAD thread,
+    IN BOOLEAN createdSuspended
+    );
+
+VOID
+PspSystemRuntime(
+    IN ULONG runtimeStart,
+    IN HANDLE runtimeHandle
+    );
 
 #endif // _PSP_
