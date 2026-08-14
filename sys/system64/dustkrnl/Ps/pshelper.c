@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-
-=======
 #ifndef _PS_HELPER_SYS_H_
 #define _PS_HELPER_SYS_H_
 
@@ -176,4 +173,3 @@ PsStatusObjectRun (
 #ifndef __cplusplus
 }
 #endif
->>>>>>> bcf5526 (adding files via commition)

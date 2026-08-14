@@ -425,6 +425,25 @@ PspThreadRunning(
     OUT PETHREAD *threadPointer OPTIONAL
     );
 
+/* thread exit support */
+
+VOID
+PspExitApcRundownThread(
+    IN PKAPC apc
+    );
+
+VOID
+PspExitThreadSystem(
+    IN DUSTSTATUS exitStatus
+    );
+
+VOID
+PspThreadTerminateByPointer(
+    IN PETHREAD thread,
+    IN DUSTSTATUS exitStatus,
+    IN BOOLEAN DirectTerminate
+    );
+
 /* system inialize runtime */
 
 VOID
@@ -441,5 +460,7 @@ PspSystemRuntime(
     IN ULONG runtimeStart,
     IN HANDLE runtimeHandle
     );
+
+/*  */
 
 #endif // _PSP_
