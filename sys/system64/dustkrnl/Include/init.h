@@ -2,7 +2,6 @@
 #define __INIT_H__
 
 // BEGIN dustosp
-#include "dustos.h"
 #define INIT_SYSTEMROOT_LINKAGE "//system_root"
 #define INIT_SYSTEMROOT_DLLPATH "//system_root/system64"
 #define INIT_SYSTEMROOT_SYSPATH "//sys/system64"
