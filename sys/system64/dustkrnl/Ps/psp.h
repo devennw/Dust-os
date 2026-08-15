@@ -461,6 +461,16 @@ PspSystemRuntime(
     IN HANDLE runtimeHandle
     );
 
-/*  */
+/* context menegement */
+
+VOID
+PspContextSet(
+    OUT PKTRAP_FRAME trapFrame,
+    IN PVOID context,
+    IN CONTEXT_POINTERS contextNonVolatile,
+    IN CONTEXT_POINTERS contextVolatile,
+    IN PCONTEXT context,
+    IN KPROCESSOR_MODE previousMode
+    );
 
 #endif // _PSP_
