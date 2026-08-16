@@ -401,20 +401,20 @@ PspReaper(
 
 VOID
 PspThreadStartup(
-    __out HANDLE threadProcess,
-    __in PETHREAD thread,
-    __in PVOID startContext,
-    __in PKSTART_ROUTINE startRoutine,
-    __out PCONTEXT threadContext OPTIONAL,
-    __in ULONG threadStart OPTIONAL
+    OUT HANDLE threadProcess,
+    IN PETHREAD thread,
+    IN PVOID startContext,
+    IN PKSTART_ROUTINE startRoutine,
+    IN PCONTEXT threadContext OPTIONAL,
+    IN ULONG threadStart OPTIONAL
     );
 
 VOID
 PspThreadUserStartup(
-    __in PKSTART_ROUTINE startRoutine,
-    __in PVOID startContext,
-    __in PETHREAD threadStartup,
-    __in DUSTSTATUS userStartup
+    IN PKSTART_ROUTINE startRoutine,
+    IN PVOID startContext,
+    IN PETHREAD threadStartup,
+    IN DUSTSTATUS userStartup
     );
 
 DUSTSTATUS
@@ -472,5 +472,33 @@ PspContextSet(
     IN PCONTEXT context,
     IN KPROCESSOR_MODE previousMode
     );
+
+VOID
+PspGetContext(
+    IN PKTRAP_FRAME trapframe,
+    IN PKNONVOLATILE_CONTEXT contextNonVolatile,
+    IN OUT PCONTEXT context,
+    IN OUT KPROCESSOR_MODE previousMode OPTIONAL
+    );
+
+VOID
+PspSetGetSpesialContextApc(
+    IN PKAPC apc,
+    IN PKSTART_ROUTINE startRoutine OPTIONAL,
+    IN OUT PKNORMAL_ROUTINE *normalRoutine,
+    IN OUT PVOID *normalContext,
+    IN OUT PVOID *systemArgument1,
+    IN OUT PVOID *systemArgument2
+    );
+
+VOID
+PspExitNormalRoutineApc(
+    IN PVOID NormalContext,
+    IN PVOID systemArgument1,
+    IN PVOID systemArgument2,
+    IN DUSTSTATUS exitStatus
+    );
+
+/*  */
 
 #endif // _PSP_
