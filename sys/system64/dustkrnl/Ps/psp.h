@@ -136,8 +136,10 @@ typedef struct _GET_SET_CONTEXT {
 typedef struct _SYSTEM_DSA {
     PVOID section;
     PVOID DsaBase;
+    PVOID DllBase;
     PKNORMAL_ROUTINE loaderNormalInitRoutine;
-    EX_PUSH_LOCK dsaLock;
+    EX_PUSH_LOCK DsaLock;
+    EX_PUSH_LOCK DllLock;
 } SYSTEM_DSA, *PSYSTEM_DSA;
 
 typedef struct _JOB_WORKING_SET_CHANGE_HEAD {
@@ -523,6 +525,40 @@ PspDeleteThreadProcess(
     IN PETHREAD thread
     );
 
+
+extern PHANDLE_TABLE PspCidTable;
+extern HANDLE PspInitialSystemProcessHandle;
+extern PACCESS_TOKEN PspBootAccessToken;
+extern SYSTEM_DLL PspSystemDll;
+extern PETHREAD PspShutdownThread;
+
+extern ULONG PspDefaultPagedLimit;
+extern ULONG PspDefaultNonPagedLimit;
+extern ULONG PspDefaultPagefileLimit;
+extern ULONG PsMinimumWorkingSet;
+
+extern EPROCESS_QUOTA_BLOCK PspDefaultQuotaBlock;
+extern BOOLEAN PspDoingGiveBacks;
+
+extern PKDUST64_PROCESS_CALLOUT PspD64ProcessCallout;
+extern PKDUST64_THREAD_CALLOUT PspD64ThreadCallout;
+extern PKDUST64_JOB_CALLOUT PspD64JobCallout;
+extern ULONG PspD64ProcessSize;
+extern ULONG PspD64ThreadSize;
+extern SCHAR PspForegroundQuantum[3];
+
+
+#define PSP_NUMBER_OF_SCHEDULING_CLASSES    10
+#define PSP_DEFAULT_SCHEDULING_CLASSES      5
+
+extern const SCHAR PspJobSchedulingClasses[PSP_NUMBER_OF_SCHEDULING_CLASSES];
+extern BOOLEAN PspUseJobSchedulingClasses;
+
+extern LIST_ENTRY PspJobList;
+extern KDPC PspJobLimeLimitsDpc;
+extern KTIMER PspJobTimeLimitsTimer;
+extern WORK_QUEUE_ITEM PspJobTimeLimitsWorkItem;
+extern KSPIN_LOCK PspQuotaLock;
 
 
 #endif // _PSP_
