@@ -499,6 +499,30 @@ PspExitNormalRoutineApc(
     IN DUSTSTATUS exitStatus
     );
 
-/*  */
+/* private security routine */
+
+DUSTSTATUS
+PspInializedSecurityProcess(
+    IN PEPROCESS child,
+    IN PEPROCESS parent OPTIONAL
+    );
+
+VOID
+PspDeleteSecurityProcess(
+    IN PEPROCESS process
+    );
+
+VOID
+PspInializedThreadProcess(
+    IN PETHREAD thread,
+    IN PEPROCESS process
+    );
+
+VOID
+PspDeleteThreadProcess(
+    IN PETHREAD thread
+    );
+
+
 
 #endif // _PSP_

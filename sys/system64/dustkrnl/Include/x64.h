@@ -1,18 +1,18 @@
-#ifndef __x64_ 
-#define __x64_
+#ifndef __amd64_
+#define __amd64_
 
 #if defined (_M_X64)
 
 VOID
 KeCompactServiceTable (
-    IN PRTV_T  table;
-    IN U64    limit;
+    IN PRTV_T table;
+    IN ULONG limit;
     IN BOOLEAN Dust32k;
     );
 
 /* header mechine architecture */
 
-#define IMAGE_HEADER_FILE_MECHINE_NATIVE  0x8cb5
+#define IMAGE_HEADER_FILE_MECHINE_NATIVE  0xb4a8
 #endif
 
 /* end dustsp */
@@ -23,13 +23,13 @@ KeCompactServiceTable (
 #define exRaiseException    rtlRaiseException
 #define exRaiseStatus       rtlRaiseStatus
 
-#endif 
+#endif
 
 /* mendefinisikan fungsi unik untuk keluar dan masuk */
 
 #ifdef __cplusplus
 extern "C" {
-#endif 
+#endif
 
 UCHAR
 __inbyte (
