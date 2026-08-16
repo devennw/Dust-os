@@ -1,5 +1,11 @@
-#ifndef _PS_HELPER_SYS_H_
-#define _PS_HELPER_SYS_H_
+// Module Name:
+
+//     pshelper.c
+
+// Abstract:
+
+//     EPROCESS and ETHREAD field access for NTOS-external components
+
 
 #include "psp.h"
 
@@ -111,11 +117,24 @@ PsGetJobUIRestrictionClassJob (
   return job->UIRestictiationClass;
 }
 
-ULONG
+LONGLONG
+PsGetProcessCreateQuadTimePart(
+    __in PEPROCESS process
+    )
+{
+    return process->crateTime.QuadPart;
+}
+
+PVOID
+PsGetProcessDebugPort(
+    __in PEPROCESS process
+    )
+{
+    return process->DebugPort;
+}
 
 
-/*++
---*/
+
 #ifndef __cplusplus
 {
 #endif
@@ -142,7 +161,7 @@ PsHelperByObject (
   VOID
   )
 {
-  return _PsHelperByObject();
+  return _PsHelperByObject()->sessionId;
 }
 
 ULONG
