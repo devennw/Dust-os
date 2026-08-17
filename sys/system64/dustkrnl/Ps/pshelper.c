@@ -118,7 +118,7 @@ PsGetJobUIRestrictionClassJob (
 }
 
 LONGLONG
-PsGetProcessCreateQuadTimePart(
+PsGetProcessCreateTimeQuadPart(
     __in PEPROCESS process
     )
 {
@@ -132,8 +132,6 @@ PsGetProcessDebugPort(
 {
     return process->DebugPort;
 }
-
-
 
 #ifndef __cplusplus
 {
@@ -153,7 +151,7 @@ PsHelpingObDirCount (
   IN PULONG helpingObject,
   )
 {
-  return _PsHelpingObDirCount();
+  return _PsHelpingObDirCount()->createTime.QuadPart;
 }
 
 DUSTSTATUS
@@ -169,7 +167,7 @@ PsGetCurrentHelpingOnOb (
   VOID
   )
 {
-  return _PsGetCurrentHelping();
+  return _PsGetCurrentHelpingOnOb()->StackLimits;
 }
 
 ULONG
@@ -186,9 +184,10 @@ PsStatusObjectRun (
   __out PVOID infoObject
   )
 {
-  return _PsStatusObjectRun();
+  return _PsStatusObjectRun()->sessionId;
 }
 
 #ifndef __cplusplus
 }
-#endif
+#endif // __cplusplus
+
