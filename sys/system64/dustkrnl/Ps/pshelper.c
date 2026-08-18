@@ -125,14 +125,7 @@ PsGetProcessCreateTimeQuadPart(
     return process->crateTime.QuadPart;
 }
 
-PVOID
-PsGetProcessDebugPort(
-    __in PEPROCESS process
-    )
-{
-    return process->DebugPort;
-}
-
+#undef PsObjectProcess
 #ifndef __cplusplus
 {
 #endif
@@ -142,7 +135,7 @@ PsObjectDirFunc (
   VOID
   )
 {
-  return _PsObjectDirFunc();
+  return _PsObjectDirFunc()->objectRun;
 }
 
 VOID
@@ -167,7 +160,7 @@ PsGetCurrentHelpingOnOb (
   VOID
   )
 {
-  return _PsGetCurrentHelpingOnOb()->StackLimits;
+  return _PsGetCurrentHelpingOnOb()->objectRun;
 }
 
 ULONG
@@ -187,7 +180,66 @@ PsStatusObjectRun (
   return _PsStatusObjectRun()->sessionId;
 }
 
+DUSTSTATUS
+PsExitProcessObjectDir(
+    __in PVOID infoObject,
+    __in DUSTSTATUS exitStatus
+    )
+{
+    return exitProcessObjectRun(_PsObjectDirFunc()->objectRun);
+}
+
 #ifndef __cplusplus
 }
 #endif // __cplusplus
 
+#undef PsGetDebug
+PEPROCESS
+PsGetProcessDebug(
+    VOID
+    )
+{
+    return _PsGetProcessDebug();
+}
+
+DUSTSTATUS
+PsGetDebugInfo(
+    VOID
+    )
+{
+    return _PsGetDebugInfo()->sessionId;
+}
+
+PVOID
+PsGetProcessDebugPort(
+    __in PEPROCESS process
+    )
+{
+    return process->DebugPort;
+}
+
+VOID
+PsDebugObjectDir(
+    IN PEPROCESS process
+    )
+{
+    return _PsDebugObjectDir()->objectRun;
+}
+
+PVOID
+PsExitDebugProcess(
+    __in DUSTSTATUS exitStatus
+    )
+{
+    return exitProcess(_PsGetProcessDebug()->exitProcess);
+}
+
+VOID
+PsExitObjectDebugging(
+    __in DUSTSTATUS exitStatus,
+    __in PEPROCESS process,
+    __in PETHREAD thread OPTIONAL
+    )
+{
+    return ExitProcessObjectDebug(_PsDebugObjectDir()->objectRun);
+}
