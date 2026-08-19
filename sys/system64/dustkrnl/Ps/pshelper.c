@@ -219,7 +219,7 @@ PsGetProcessDebugPort(
 }
 
 VOID
-PsDebugObjectDir(
+PsGetProcessDebugObjectDir(
     IN PEPROCESS process
     )
 {
@@ -227,7 +227,7 @@ PsDebugObjectDir(
 }
 
 PVOID
-PsExitDebugProcess(
+PsDeleteDebugProcess(
     __in DUSTSTATUS exitStatus
     )
 {
@@ -235,7 +235,7 @@ PsExitDebugProcess(
 }
 
 VOID
-PsExitObjectDebugging(
+PsDeleteObjectDebugging(
     __in DUSTSTATUS exitStatus,
     __in PEPROCESS process,
     __in PETHREAD thread OPTIONAL
@@ -243,3 +243,5 @@ PsExitObjectDebugging(
 {
     return ExitProcessObjectDebug(_PsDebugObjectDir()->objectRun);
 }
+
+VOID
