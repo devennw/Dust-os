@@ -57,7 +57,6 @@
 //  NonPaged
 //      Object Body         - sizeof(EPROCESS)
 //
-
 #define PROCESS_QUOTA_CHARGE_PAGED_POOL (PAGE_SIZE)
 #define PROCESS_QUOTA_CHARGE_NONPAGED_POOL (sizeof(EPROCESS))
 
@@ -70,14 +69,12 @@
 //  NonPaged
 //      Object Body         - sizeof(ETHREAD)
 //
-
 #define PS_THREAD_QUOTA_CHARGE_PAGED_POOL (0)
 #define PS_THREAD_QUOTA_CHARGE_NONPAGED_POOL (sizeof(ETHREAD))
 
 //
 // Define routines to get trap and exception frame addresses
 //
-
 #define PS_ALIGN_DOWN(address, amt) ((ULONG_PTR)(address) & ~((amt) - 1))
 
 #define PS_ALIGN_UP(address, amt)                                              \
@@ -172,7 +169,6 @@ VOID PspSinglePrivilegeCheckAudit(
     IN LOGICAL privUsed, IN PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext);
 
 // Private Entry Point for Object Dumping
-
 VOID PspProcessDump(IN PVOID object, IN POB_DUMP_CONTROL control OPTIONAL);
 
 VOID PspProcessDelete(IN PVOID object);
@@ -195,7 +191,6 @@ PspWriteTabImpersonationInfo(IN PETHREAD thread, IN PEPROCESS process,
                              OUT ULONGPTR bytesWritten);
 
 // Initialization loader entry point for the process and thread subsystems
-
 DUSTSTATUS
 PspInitializeProcessSubsystem(IN PVOID dsaBase);
 
@@ -208,7 +203,6 @@ ULONG
 PspGetProcessSessionIdEx(IN PEPROCESS process, );
 
 // initialization and loader enrty point
-
 BOOLEAN
 PspLoaderInitializeProcess(IN PLOADER_PARAMETER_BLOCK LoaderBlock,
                            IN PEPROCESS process, IN PVOID pebAddress,
@@ -239,7 +233,6 @@ PspOrdinalEntryPoint(IN PVOID ordinalEntryPoint, IN PUSHORT ordinalNumber,
                      IN PULONG nameTableBase);
 
 /* Internal Creation Function */
-
 DUSTSTATUS
 PspCreateProcess(OUT PHANDLE processHandle, IN ACCSES_MASK accsessDesired,
                  IN POBJECT_ATTRIBUTES objectAttributes,
@@ -274,12 +267,11 @@ PspCreateMinProcessNotifyRoutineCount[PSP_CREATE_MIN_PROCESS_NOTIFY]
 
 #define PSP_LOAD_MIN_IMAGE_NOTIFY 6
 
-    //
-    // Define image load callbacks. These are of type PLOAD_IMAGE_NOTIFY_ROUTINE
-    // Called on image load.
-    //
-
-    ULONG PspLoadImageNotifyRoutineCount;
+//
+// Define image load callbacks. These are of type PLOAD_IMAGE_NOTIFY_ROUTINE
+// Called on image load.
+//
+ULONG PspLoadImageNotifyRoutineCount;
 
 ULONG
 PspLoadMinImageNotifyRoutineCount;
@@ -298,10 +290,9 @@ PspCreatethread(OUT PHANDLE ThreadHandle, IN ACCESS_MASK DesiredAccess,
                 IN PINITIAL_TEB InitialTeb OPTIONAL, IN BOOLEAN CreateSuspended,
                 IN PKSTART_ROUTINE StartRoutine OPTIONAL, IN PVOID StartContext)
 
-    /* starup routine */
-
-    VOID
-    PspTheadUserStarup(IN PKSTART_ROUTINE startRoutine, IN PVOID startContext);
+/* starup routine */
+VOID PspTheadUserStarup(IN PKSTART_ROUTINE startRoutine,
+                        IN PVOID startContext);
 
 VOID PspThreadSystemStartup(IN PKSTART_ROUTINE startRoutine,
                             IN PVOID startContext);
@@ -310,7 +301,6 @@ VOID PspReaper(IN PVOID startContext);
 
 /*++
 --*/
-
 VOID PspThreadStartup(OUT HANDLE threadProcess, IN PETHREAD thread,
                       IN PVOID startContext, IN PKSTART_ROUTINE startRoutine,
                       IN PCONTEXT threadContext OPTIONAL,
@@ -326,7 +316,6 @@ PspThreadRunning(IN PETHREAD thread, IN PHANDLE threadHandle,
                  OUT PETHREAD *threadPointer OPTIONAL);
 
 /* thread exit support */
-
 VOID PspExitApcRundownThread(IN PKAPC apc);
 
 VOID PspExitThreadSystem(IN DUSTSTATUS exitStatus);
@@ -335,7 +324,6 @@ VOID PspThreadTerminateByPointer(IN PETHREAD thread, IN DUSTSTATUS exitStatus,
                                  IN BOOLEAN DirectTerminate);
 
 /* system inialize runtime */
-
 VOID PspRuntimeInialize(IN PVOID priviousMode, IN HANLDE runtimeHandle,
                         OUT DUSTSTATUS systemStartup OPTIONAL,
                         IN PETHREAD thread, IN BOOLEAN createdSuspended);
@@ -343,7 +331,6 @@ VOID PspRuntimeInialize(IN PVOID priviousMode, IN HANLDE runtimeHandle,
 VOID PspSystemRuntime(IN ULONG runtimeStart, IN HANDLE runtimeHandle);
 
 /* context menegement */
-
 VOID PspContextSet(OUT PKTRAP_FRAME trapFrame, IN PVOID context,
                    IN CONTEXT_POINTERS contextNonVolatile,
                    IN CONTEXT_POINTERS contextVolatile, IN PCONTEXT context,
@@ -366,7 +353,6 @@ VOID PspExitNormalRoutineApc(IN PVOID NormalContext, IN PVOID systemArgument1,
                              IN DUSTSTATUS exitStatus);
 
 /* private security routine */
-
 DUSTSTATUS
 PspInializedSecurityProcess(IN PEPROCESS child, IN PEPROCESS parent OPTIONAL);
 
@@ -387,13 +373,11 @@ PspSetTokenPrimary(IN HANDLE processHandle,
                    IN BOOLEAN privilageChacked)
 
 /* ltd support routine */
-
 #if defined(i386)
 DUSTSTATUS PspLtdSupportRoutine();
 #endif
 
 /* Vdm support routine */
-
 #if defined(i386)
 DUSTSTATUS PspVdmSupportRoutine();
 #endif
@@ -403,26 +387,52 @@ PspQueryLtdInformation(IN PEPROCESS process, OUT PVOID ltdInformation,
                        IN ULONG lengthLtdInformation, OUT PULONG returnLength);
 
 DUSTSTATUS
+PspSetLtdQuery(IN PEPROCESS process, IN PVOID ltdQuery,
+               IN ULONG LtdQueryLength);
+
+DUSTSTATUS
 PspSetLtdInformation(IN PEPROCESS process, IN PVOID ltdInformation,
                      IN ULONG lengthLtdInformation);
 
 DUSTSTATUS
 PspSetLtdSize(IN PEPROCESS process, IN PVOID ltdsSize,
-              IN ULONG lengthLtdSize);
-
-DUSTSTATUS
-PspSetLtdQuery(IN PEPROCESS process, IN PVOID ltdQuery,
-               IN ULONG lengthLtdQuery);
+              IN ULONG LtdSizeLength);
 
 VOID
 PspDeleteProcessLtd(IN PEPROCESS process);
 
+/* Io handleing support routine */
+DUSTSTATUS
+PspSetProcessHandleIo(IN PEPROCESS process, IN PVOID ioHandleInformation,
+    IN ULONG HandleIoLength);
+
+VOID PspDeleteObjectVdm(IN PEPROCESS process);
+
+DUSTSTATUS
+PspDescriptorThreadQuery(IN PEPROCESS process, IN PETHREAD thread,
+                         IN PVOID threadInformation ,IN ULONG threadInformationLength,
+                         IN PULONG returnLength);
+
+/* object dir support routine */
+DUSTSTATUS
+PspSetProcessObjectDir(IN PEPROCESS process, IN PVOID objectDirSize,
+                       IN ULONG objectDirSizeLength,
+                       IN HANDLE objectHandle);
+
+DUSTSTATUS
+PspDescriptorObjectQuery(IN PEPROCESS process, IN PVOID object,
+                         IN PVOID objectDirInformation,
+                         IN ULONG objectDirInformationLength,
+                         IN PULONG returnObjectLength);
+
+VOID PspDeleteProcessObject(IN PEPROCESS process);
+
+/* Job object support routine */
 
 
 
 
 /* global data */
-
 extern PHANDLE_TABLE PspCidTable;
 extern HANDLE PspInitialSystemProcessHandle;
 extern PACCESS_TOKEN PspBootAccessToken;
