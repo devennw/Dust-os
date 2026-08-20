@@ -6,123 +6,85 @@
 
 //     EPROCESS and ETHREAD field access for NTOS-external components
 
-
 #include "psp.h"
 
 #ifdef ALLOC_PRAGMA
-#pragma alloc_text (PAGE, PsIsProcessBeingDebugged)
-#pragma alloc_text (PAGE, PsIsThreadImpersonating)
-#pragma alloc_text (PAGE, PsReferenceProcessFilePointer)
-#pragma alloc_text (PAGE, PsSetProcessDust32Process)
-#pragma alloc_text (PAGE, PsSetProcessSecurityPort)
-#pragma alloc_text (PAGE, PsSetJobUIRestrictionsClass)
-#pragma alloc_text (PAGE, PsSetProcessWindowStation)
-#pragma alloc_text (PAGE, PsGetProcessSecurityPort)
-#pragma alloc_text (PAGE, PsSetThreadDust32Thread)
-#pragma alloc_text (PAGE, PsGetProcessExitProcessCalled)
-#pragma alloc_text (PAGE, PsGetThreadSessionId)
-#pragma alloc_text (PAGE, PsSetProcessPriorityClass)
-#pragma alloc_text (PAGE, PsIsSystemProcess)
+#pragma alloc_text(PAGE, PsIsProcessBeingDebugged)
+#pragma alloc_text(PAGE, PsIsThreadImpersonating)
+#pragma alloc_text(PAGE, PsReferenceProcessFilePointer)
+#pragma alloc_text(PAGE, PsSetProcessDust32Process)
+#pragma alloc_text(PAGE, PsSetProcessSecurityPort)
+#pragma alloc_text(PAGE, PsSetJobUIRestrictionsClass)
+#pragma alloc_text(PAGE, PsSetProcessWindowStation)
+#pragma alloc_text(PAGE, PsGetProcessSecurityPort)
+#pragma alloc_text(PAGE, PsSetThreadDust32Thread)
+#pragma alloc_text(PAGE, PsGetProcessExitProcessCalled)
+#pragma alloc_text(PAGE, PsGetThreadSessionId)
+#pragma alloc_text(PAGE, PsSetProcessPriorityClass)
+#pragma alloc_text(PAGE, PsIsSystemProcess)
 #endif
 
 /*++
 --*/
 #undef PsGetCurrentProcess
 PEPROCESS
-PsGetCurrentProcess (
-  VOID
-  )
-{
-  return _PsGetCurrentProcess();
+PsGetCurrentProcess(VOID) { 
+    return _PsGetCurrentProcess(); 
 }
 
 ULONG
-PsGetCurrentSessionId (
-  VOID
-  )
-{
-  return mmGetSessionId (_PsGetSessionId());
+PsGetCurrentSessionId(VOID) { 
+    return mmGetSessionId(_PsGetSessionId()); 
 }
 
 ULONG
-PsGetCurrentDetectId (
-  VOID
-  )
-{
-  return dtkDetectIdSession (_PsGetDetectId());
+PsGetCurrentDetectId(VOID) { 
+    return dtkDetectIdSession(_PsGetDetectId()); 
 }
 
 #undef PsGetThread
 PETHREAD
-PsGetThread (
-  VOID
-  )
-{
-  return _PsGetThread();
+PsGetThread(VOID) {
+    return _PsGetThread();
 }
 
 PVOID
-PsGetThreadStackBase (
-  VOID
-  )
-{
-  return _PsGetThreadStackBase();
+PsGetThreadStackBase(VOID) {
+    return _PsGetThreadStackBase(); 
 }
 
-VOID
-PsGetThreadStackLimits (
-  VOID
-  )
-{
+VOID PsGetThreadStackLimits(VOID) {
   return _PsGetThreadStackLimits()->Stacklimits;
 }
 
 ULONG
-PsGetThreadStackId (
-  VOID
-  )
-{
-  return thrGetThread(_PsGetThreadStackId(););
+PsGetThreadStackId(VOID) {
+    return thrGetThread(_PsGetThreadStackId());
 }
 
 CCHAR
-PsGetThreadPreviousMode (
-  VOID
-  )
-{
-  return KePsGetPreviousMode();
+PsGetThreadPreviousMode(VOID) { 
+    return KePsGetPreviousMode(); 
 }
 
 PERESOURCE
-PsGetLockJob (
-  __in PEJOB job
-  )
-{
-  return &job->jobLock;
+PsGetLockJob(__in PEJOB job) { 
+    return &job->jobLock; 
 }
 
 ULONG
-PsSessionJobId (
-  __in PEJOB job
-  )
-{
-  return &job->sessionId;
+PsSessionJobId(__in PEJOB job) {
+    return &job->sessionId; 
 }
 
 ULONG
-PsGetJobUIRestrictionClassJob (
-  __in PEJOB job
-  )
-{
+PsGetJobUIRestrictionClassJob(__in PEJOB job) {
   return job->UIRestictiationClass;
 }
 
 LONGLONG
-PsGetProcessCreateTimeQuadPart(
-    __in PEPROCESS process
-    )
-{
-    return process->crateTime.QuadPart;
+PsGetProcessCreateTimeQuadPart(__in PEPROCESS process) {
+  return process->crateTime.QuadPart;
 }
 
 #undef PsObjectProcess
@@ -130,64 +92,39 @@ PsGetProcessCreateTimeQuadPart(
 {
 #endif
 
-PEPROCESS
-PsObjectDirFunc (
-  VOID
-  )
-{
-  return _PsObjectDirFunc()->objectRun;
-}
+  PEPROCESS
+  PsObjectDirFunc(VOID) { 
+      return _PsObjectDirFunc()->objectRun; 
+  }
 
-VOID
-PsHelpingObDirCount (
-  IN PVOID countObDir,
-  IN PULONG helpingObject,
-  )
-{
-  return _PsHelpingObDirCount()->createTime.QuadPart;
-}
+  VOID PsHelpingObDirCount(IN PVOID countObDir, IN PULONG helpingObject, ) {
+    return _PsHelpingObDirCount()->createTime.QuadPart;
+  }
 
-DUSTSTATUS
-PsHelperByObject (
-  VOID
-  )
-{
-  return _PsHelperByObject()->sessionId;
-}
+  DUSTSTATUS
+  PsHelperByObject(VOID) { 
+      return _PsHelperByObject()->sessionId; 
+  }
 
-ULONG
-PsGetCurrentHelpingOnOb (
-  VOID
-  )
-{
-  return _PsGetCurrentHelpingOnOb()->objectRun;
-}
+  ULONG
+  PsGetCurrentHelpingOnOb(VOID) {
+    return _PsGetCurrentHelpingOnOb()->objectRun;
+  }
 
-ULONG
-PsGetObjectRunning (
-  VOID
-  )
-{
-  return _PsGetObjectRunning();
-}
+  ULONG
+  PsGetObjectRunning(VOID) { 
+      return _PsGetObjectRunning();
+  }
 
-DUSTSTATUS
-PsStatusObjectRun (
-  __in PETHREAD thread,
-  __out PVOID infoObject
-  )
-{
-  return _PsStatusObjectRun()->sessionId;
-}
+  DUSTSTATUS
+  PsStatusObjectRun(__in PETHREAD thread, __out PVOID infoObject) {
+    return _PsStatusObjectRun()->sessionId;
+  }
 
-DUSTSTATUS
-PsExitProcessObjectDir(
-    __in PVOID infoObject,
-    __in DUSTSTATUS exitStatus
-    )
-{
+  DUSTSTATUS
+  PsExitProcessObjectDir(__in PVOID infoObject, __in DUSTSTATUS exitStatus) {
     return exitProcessObjectRun(_PsObjectDirFunc()->objectRun);
-}
+  }
 
 #ifndef __cplusplus
 }
@@ -195,53 +132,46 @@ PsExitProcessObjectDir(
 
 #undef PsGetDebug
 PEPROCESS
-PsGetProcessDebug(
-    VOID
-    )
-{
-    return _PsGetProcessDebug();
+PsGetProcessDebug(VOID) { return _PsGetProcessDebug(); }
+
+DUSTSTATUS
+PsGetDebugInfo(VOID) { return _PsGetDebugInfo()->sessionId; }
+
+PVOID
+PsGetProcessDebugPort(__in PEPROCESS process) { return process->DebugPort; }
+
+VOID PsGetProcessDebugObjectDir(IN PEPROCESS process) {
+  return _PsDebugObjectDir()->objectRun;
+}
+
+BOOLEAN
+PsProcessIsBeingDebugged(__in PEPROCESS process) {
+  if (process->DebugPort != NULL) {
+    return TRUE;
+  } elseif(process->DebugPort == TRUE) { 
+      return process->DebugPort; 
+  } else {
+    return FALSE;
+  }
+}
+
+BOOLEAN
+PsGetExitProcessCalled(__in PEPROCESS process) {
+  return (BOOLEAN)((process->flags & PS_FLAGS_PROCESS_EXITING) != 0);
+}
+
+BOOLEAN
+PsExitDebugProcess(__in DUSTSTATUS exitStatus) {
+  return exitProcess(_PsGetProcessDebug()->exitProcess);
 }
 
 DUSTSTATUS
-PsGetDebugInfo(
-    VOID
-    )
-{
-    return _PsGetDebugInfo()->sessionId;
+PsExitObjectDebugging(__in DUSTSTATUS exitStatus, __in PEPROCESS process,
+                      __in PETHREAD thread OPTIONAL) {
+  return ExitProcessObjectDebug(_PsDebugObjectDir()->objectRun);
 }
 
-PVOID
-PsGetProcessDebugPort(
-    __in PEPROCESS process
-    )
-{
-    return process->DebugPort;
+HANDLE
+PsGetProcessId(__in PEPROCESS process) {
+    return process->uniqueProcessId; 
 }
-
-VOID
-PsGetProcessDebugObjectDir(
-    IN PEPROCESS process
-    )
-{
-    return _PsDebugObjectDir()->objectRun;
-}
-
-PVOID
-PsDeleteDebugProcess(
-    __in DUSTSTATUS exitStatus
-    )
-{
-    return exitProcess(_PsGetProcessDebug()->exitProcess);
-}
-
-VOID
-PsDeleteObjectDebugging(
-    __in DUSTSTATUS exitStatus,
-    __in PEPROCESS process,
-    __in PETHREAD thread OPTIONAL
-    )
-{
-    return ExitProcessObjectDebug(_PsDebugObjectDir()->objectRun);
-}
-
-VOID
