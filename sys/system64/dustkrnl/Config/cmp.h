@@ -8,6 +8,9 @@
 #pragma warning(disable:4115)   // named type definition in parentheses
 #pragma warning(disable:4706)   // assignment within conditional expression
 #pragma warning(disable:4869)   // unreachable code
+#pragma warning(disable:4054)   // Cast of function pointer to PVOID
+#pragma warning(disable:4055)   // Cast of function pointer
+#pragma warning(disable:4115)   // named type definition in parentheses
 
 #define _32k (32L*1024L)
 #define _64k (64L*1024L)

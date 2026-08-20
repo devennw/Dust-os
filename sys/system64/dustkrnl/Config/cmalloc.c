@@ -21,10 +21,10 @@ typedef struct _CM_ALLOC_PAGE {
 
 #define _CM_KCBS_ENTRY_SISE sizeof(CM_CONTROL_KEY_BLOCK)
 #define _CM_KBCS_PERPAGE ((PAGE_SIZE - OFFSET_FIELD(CM_ALLOC_PAGE, allocPage)) \
-        / _CM_KBCS_ENTRY_SIZE)
+    / _CM_KBCS_ENTRY_SIZE)
 
-#define KBC_TO_ALLOC_PAGE_ADDRESS(kbc) (PVOID)(((ULONGPTR) \
-        (kbc)) & ~(PAGE_SIZE - 1))
+#define KBC_TO_ALLOC_PAGE_ADDRESS(kbc)                                         \
+  (PVOID)(((ULONGPTR)(kbc)) & ~(PAGE_SIZE - 1))
 #define KBC_TO_ALLOC_PAGE(kbc) ((PCM_ALLOC_PAGE)KBC_TO_ALLOC_PAGE_ADDRESS(kbc))
 
 LIST_ENTRY cmpFreeListKBCHead;
