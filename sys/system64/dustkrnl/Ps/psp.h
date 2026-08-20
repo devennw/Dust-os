@@ -1,20 +1,20 @@
 #ifndef _PSP_
 #define _PSP_
 
-#pragma warning(disable : 4201) // nonstandard extension used : nameless struct/union
-#pragma warning(disable : 4214) // nonstandard extension used : bit field types other than int
-#pragma warning(disable : 4324) // structure was padded due to alignment specifier
-#pragma warning(disable : 4514) // unreferenced inline function has been removed
-#pragma warning(disable : 4702) // unreachable code
-#pragma warning(disable : 4820) // padding added after data member
+#pragma warning(disable:4201) // nonstandard extension used : nameless struct/union
+#pragma warning(disable:4214) // nonstandard extension used : bit field types other than int
+#pragma warning(disable:4324) // structure was padded due to alignment specifier
+#pragma warning(disable:4514) // unreferenced inline function has been removed
+#pragma warning(disable:4702) // unreachable code
+#pragma warning(disable:4820) // padding added after data member
 
-#pragma warning(disable : 4054) // Cast of function pointer to PVOID
-#pragma warning(disable : 4055) // Cast of function pointer
-#pragma warning(disable : 4115) // named type definition in parentheses
-#pragma warning(disable : 4127) // condition expression is constant
-#pragma warning(disable : 4152) // Casting function pointers
-#pragma warning(disable : 4327) // alignment on assignment
-#pragma warning(disable : 4328) // alignment on assignment
+#pragma warning(disable:4054) // Cast of function pointer to PVOID
+#pragma warning(disable:4055) // Cast of function pointer
+#pragma warning(disable:4115) // named type definition in parentheses
+#pragma warning(disable:4127) // condition expression is constant
+#pragma warning(disable:4152) // Casting function pointers
+#pragma warning(disable:4327) // alignment on assignment
+#pragma warning(disable:4328) // alignment on assignment
 
 #include "dusturtl.h"
 #include "ki.h"
@@ -85,9 +85,8 @@
 
 #if defined(_AMD64_)
 
-FORCEINLINE
-PK_TRAP_FRAME
-PspGetTrapFrame(IN PETHREAD thread) {
+__forceinline
+  PK_TRAP_FRAME PspGetTrapFrame(IN PETHREAD thread) {
   ULONGLONG initialStack;
   PKERNEL_STACK_CONTROL stackControl;
 
@@ -377,10 +376,57 @@ VOID PspInializedThreadProcess(IN PETHREAD thread, IN PEPROCESS process);
 
 VOID PspDeleteThreadProcess(IN PETHREAD thread);
 
+DUSTSTATUS
+PspTokenPrimaryAssign(IN PEPROCESS process, IN PHANDLE tokenHandle,
+                      IN HANDLE token, IN PACCES_TOKEN tokenPointer OPTIONAL);
+
+DUSTSTATUS
+PspSetTokenPrimary(IN HANDLE processHandle,
+                   IN PEPROCESS processPointer OPTIONAL, IN PHANDLE tokenHandle,
+                   IN HANDLE token, IN PACCES_TOKEN tokenPointer OPTIONAL,
+                   IN BOOLEAN privilageChacked)
+
+/* ltd support routine */
+
+#if defined(i386)
+DUSTSTATUS PspLtdSupportRoutine();
+#endif
+
+/* Vdm support routine */
+
+#if defined(i386)
+DUSTSTATUS PspVdmSupportRoutine();
+#endif
+
+DUSTSTATUS
+PspQueryLtdInformation(IN PEPROCESS process, OUT PVOID ltdInformation,
+                       IN ULONG lengthLtdInformation, OUT PULONG returnLength);
+
+DUSTSTATUS
+PspSetLtdInformation(IN PEPROCESS process, IN PVOID ltdInformation,
+                     IN ULONG lengthLtdInformation);
+
+DUSTSTATUS
+PspSetLtdSize(IN PEPROCESS process, IN PVOID ltdsSize,
+              IN ULONG lengthLtdSize);
+
+DUSTSTATUS
+PspSetLtdQuery(IN PEPROCESS process, IN PVOID ltdQuery,
+               IN ULONG lengthLtdQuery);
+
+VOID
+PspDeleteProcessLtd(IN PEPROCESS process);
+
+
+
+
+
+/* global data */
+
 extern PHANDLE_TABLE PspCidTable;
 extern HANDLE PspInitialSystemProcessHandle;
 extern PACCESS_TOKEN PspBootAccessToken;
-extern SYSTEM_DLL PspSystemDll;
+extern SYSTEM_DLL PspSystemDsa;
 extern PETHREAD PspShutdownThread;
 
 extern ULONG PspDefaultPagedLimit;
