@@ -4,7 +4,7 @@
 
 // Abstract:
 
-//     EPROCESS and ETHREAD field access for NTOS-external components
+//     EPROCESS and ETHREAD field access for DUSTOS-external components
 
 #include "psp.h"
 
@@ -132,13 +132,19 @@ PsGetProcessCreateTimeQuadPart(__in PEPROCESS process) {
 
 #undef PsGetDebug
 PEPROCESS
-PsGetProcessDebug(VOID) { return _PsGetProcessDebug(); }
+PsGetProcessDebug(VOID) { 
+    return _PsGetProcessDebug(); 
+}
 
 DUSTSTATUS
-PsGetDebugInfo(VOID) { return _PsGetDebugInfo()->sessionId; }
+PsGetDebugInfo(VOID) {
+    return _PsGetDebugInfo()->sessionId; 
+}
 
 PVOID
-PsGetProcessDebugPort(__in PEPROCESS process) { return process->DebugPort; }
+PsGetProcessDebugPort(__in PEPROCESS process) {
+    return process->DebugPort;
+}
 
 VOID PsGetProcessDebugObjectDir(IN PEPROCESS process) {
   return _PsDebugObjectDir()->objectRun;
@@ -148,12 +154,9 @@ BOOLEAN
 PsProcessIsBeingDebugged(__in PEPROCESS process) {
   if (process->DebugPort != NULL) {
     return TRUE;
-  } elseif(process->DebugPort == TRUE) { 
-      return process->DebugPort; 
   } else {
     return FALSE;
   }
-}
 
 BOOLEAN
 PsGetExitProcessCalled(__in PEPROCESS process) {
@@ -174,4 +177,78 @@ PsExitObjectDebugging(__in DUSTSTATUS exitStatus, __in PEPROCESS process,
 HANDLE
 PsGetProcessId(__in PEPROCESS process) {
     return process->uniqueProcessId; 
+}
+
+UCHAR
+*PspGetProcessImageNameFile(__in PEPROCESS process) {
+    return process->imageFileName;
+}
+
+HANDLE
+PspGetProcessUniqueInheritProcessId(__in PEPROCESS process) {
+    return process->uniqueInheritProcessId;
+}
+
+PEJOB 
+PsGetProcessJob(__in PEPROCESS process) {
+    return process->job;
+}
+
+ULONG
+PsGetProcessSessionId(__in PEPROCESS process) {
+    return mmGetSessionId(process);
+}
+
+ULONG
+PsGetProcessSessionIdEx(__in PEPROCESS process) {
+    return mmGetSessionIdEx(process);
+}
+
+PVOID
+PsGetProcessSectionBaseAddress(__in PEPROCESS) {
+    return process->sectionBaseAddress;
+}
+
+PPEB PsGetProcessPeb(__in PEPROCESS process) {
+    return process->peb;
+}
+
+UCHAR
+PsGetProcessClassPriority(__in PEPROCESS process) {
+    return process->classPriority;
+}
+
+HANDLE
+PsGetProcessDust64WindowStation(__in PEPROCESS process) {
+    return process->dust64WindowStation;
+}
+
+PVOID
+PsGetProcessDust64Process(__in PEPROCESS process) {
+    return process->dust64Process;
+}
+
+HANDLE
+PsGetThreadId(__in PETHREAD thread) {
+    return thread->cId.UniqueThread;
+}
+
+CCHAR
+PsGetThreadFreezeCount(__in PETHREAD thread) {
+    return thread->tcb.freezeCount;
+}
+
+BOOLEAN
+PsGetDisabledForThreadHardError(__in PETHREAD thread) {
+    return (BOOLEAN) (thread->);
+}
+
+PEPROCESS
+PsGetThreadProcess(__in PETHREAD thread) {
+    return PROCESS_THREAD(thread);
+}
+
+PEPROCESS 
+PsGetCurrentThreadProcess(VOID) {
+    return PROCESS_THREAD(_PsGetCurrentProcess());
 }
