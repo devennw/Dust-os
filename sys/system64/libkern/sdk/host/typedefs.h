@@ -54,11 +54,8 @@ typedef void VOID, *PVOID, *LPVOID;
 typedef char CHAR, CCHAR, *PCHAR, *PSTR, *LPSTR;
 typedef const char *PCSTR, *LPCSTR;
 typedef unsigned char UCHAR, *PUCHAR, BYTE, *LPBYTE, BOOLEAN, *PBOOLEAN;
-<<<<<<< HEAD
 typedef uint8_t UINT8;
-=======
 typedef uint8_t UCHAR, *PUCHAR, BOOLEAN, UINT8;
->>>>>>> bcf5526 (adding files via commition)
 typedef int16_t SHORT, *PSHORT;
 typedef uint16_t USHORT, *PUSHORT, WORD, *PWORD, *LPWORD, WCHAR, *PWCHAR, *PWSTR, *LPWSTR, UINT16;
 typedef const uint16_t *PCWSTR, *LPCWSTR;
@@ -108,11 +105,11 @@ typedef WORD LANGID;
 //============================================
 
 typedef struct _EXCEPTION_RECORD {
-  U32 exceptionCode;
-  U32 exceptionFlags;
+  ULONG exceptionCode;
+  ULONG exceptionFlags;
   struct _EXCEPTION_RECORD* ExceptionRecord;
   PVOID exceptionAddres;
-  U32 numberParameters;
+  ULONG numberParameters;
   ULONGPTR exceptionInformation[15];
 } EXCEPTION_RECORD, *PEXCEPTION_RECORD;
 
@@ -150,9 +147,8 @@ void xfree(void *v);
 //==============================================
 
 typedef struct _DUST_STR {
-<<<<<<< HEAD
-  U16 length;
-  U16 maximumLength;
+  USHORT length;
+  USHORT maximumLength;
 char* buffer;
   USHORT length;
   USHORT maximumLength;
@@ -166,10 +162,10 @@ typedef struct _LIST_ENTRY {
 
 typedef union _LARGE_INTEGER {
   struct {
-    U32 lowPart;
-    I32 highPart;
+    ULONG lowPart;
+    LONG highPart;
   };
-    I64 quadPart;
+    LONGLONG quadPart;
     ULONG lowPart;
     LONG highPart;
   };
@@ -177,14 +173,14 @@ typedef union _LARGE_INTEGER {
 } LARGE_INTEGER;
 
 typedef struct _DUST_SPINLOCK {
-  volatile U32 lock;
+  volatile ULONG lock;
 } DUST_SPINLOCK;
 
 typedef struct _DUST_GUID {
-  U32 data1;
-  U16 data2;
-  U16 data3;
-  U8 data4[8];
+  ULONG data1;
+  USHORT data2;
+  USHORT data3;
+  UCHAR data4[8];
   ULONG data1;
   USHORT data2;
   USHORT data3;
