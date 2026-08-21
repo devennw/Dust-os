@@ -5,10 +5,10 @@ typedef _MMSUPPORT_FLAGS {
 
   /* The next 8 bits are protected by the expansion lock. */
 
-  UCHAR sessionSpace : 1;
-  UCHAR beingTrimmed : 1;
-  UCHAR leatherSession : 1;
-  UCHAR
+  uint8_t sessionSpace : 1;
+  uint8_t beingTrimmed : 1;
+  uint8_t leatherSession : 1;
+  uint8_t 
 
 }
 

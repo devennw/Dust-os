@@ -72,5 +72,3 @@ extern POBJECT_TYPE LpcPortObjectTypes;
 extern POBJECT_TYPE LpcWaitablePortObjectTypes;
 
 #endif
-
-#ifdef _DUSTDRIVER_

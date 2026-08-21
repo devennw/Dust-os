@@ -29,18 +29,8 @@
 #define DPRINT if (0) printf
 #define DPRINT1 printf
 
->>>>>>> bcf5526 (adding files via commition)
-#define DAPI
-#define DUSTAPI
-
-#define IN
-#define OUT
-#define OPTIONAL
-
 #define FALSE   0
 #define TRUE    1
-
-#define ANYSIZE_ARRAY   1
 
 #ifndef NULL
 #define NULL ((void*)0)
@@ -128,11 +118,11 @@ typedef struct _ETHREAD ETHREAD, *PETHREAD;
 
 #define nelem(arr) (sizeof((arr)[0]) / sizeof((arr)))
 
-int readn(void *fd, char *buf, ULONG len);
-int seek(void *fd, ULONG off, int mode);
+int readn(void *fd, char *buf, uint32_t len);
+int seek(void *fd, uint32_t off, int mode);
 
-void *AllocMemZero(ULONG num, ULONG size);
-void *Realloc(void *mem, ULONG newsize);
+void *AllocMemZero(uint32_t num, uint32_t size);
+void *Realloc(void *mem, uint32_t newsize);
 void xfree(void *v);
 
 #define werrstr(str, ...) DPRINT(str "\n" ,##__VA_ARGS__)
@@ -325,8 +315,7 @@ RemoveHeadList(
 
 static __inline
 PLIST_ENTRY
-RemoveTailList(
-               IN PLIST_ENTRY ListHead)
+RemoveTailLis(PLIST_ENTRY ListHead)
 {
     PLIST_ENTRY Blink;
     PLIST_ENTRY Entry;
@@ -360,7 +349,7 @@ typedef const UNICODE_STRING *PCUNICODE_STRING;
 #define FIELD_OFFSET(t,f)       ((LONG)__builtin_offsetof(t,f))
 #endif
 #define RTL_CONSTANT_STRING(s)  { sizeof(s)-sizeof((s)[0]), sizeof(s), s }
-#define CONTAINING_RECORD(address, type, field)  ((type *)(((ULONG_PTR)address) - (ULONG_PTR)(&(((type *)0)->field))))
+#define CONTAINING_RECORD(address, type, field)  ((type *)(((ULONG_PTR)address) - (ULONG)(&(((type *)0)->field))))
 
 #define RtlZeroMemory(Destination, Length)            memset(Destination, 0, Length)
 #define RtlCopyMemory(Destination, Source, Length)    memcpy(Destination, Source, Length)

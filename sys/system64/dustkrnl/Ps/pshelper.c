@@ -235,12 +235,12 @@ PsGetThreadId(__in PETHREAD thread) {
 
 CCHAR
 PsGetThreadFreezeCount(__in PETHREAD thread) {
-    return thread->tcb.freezeCount;
+    return thread->Tcb.freezeCount;
 }
 
 BOOLEAN
 PsGetDisabledForThreadHardError(__in PETHREAD thread) {
-    return (BOOLEAN) (thread->);
+    return (BOOLEAN) (thread->crossThreasFlags&PS_CROSS_DISABLED_FOR_THREAD_HARD_ERROR) != 0;
 }
 
 PEPROCESS

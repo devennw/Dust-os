@@ -3,11 +3,11 @@
 
 #if defined (_M_X64)
 
-VOID
+void
 KeCompactServiceTable (
-    IN PRTV_T table;
-    IN ULONG limit;
-    IN BOOLEAN Dust32k;
+    void* table;
+    uint32_t limit;
+    uint8_t Dust32k;
     );
 
 /* header mechine architecture */

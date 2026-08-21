@@ -1,6 +1,7 @@
 #ifndef _DBGK_DEBUG_
 #define _DBGK_DEBUG_
 
+#include <cstdint>
 #define DBGK_THREAD_DEBUG 0x1
 #define DBGK_OBJECT_DEBUG 0x2
 #define DBGK_PROCESS_DEBUG 0x3
@@ -34,52 +35,58 @@ if (x && DbgkTraceLevel) {
 
 typedef struct OBJECT_DEBUG {
   // Event thats set when the EventList is populated.
-  KEVENT eventPresent;
+  uint32_t eventPresent;
 
   // Mutex into project structure
-  FMUTEX mutex;
+  int32_t mutex;
 
   // Queue of event waiting for debugging intervantion
   LIST_ENTRY eventList;
 
   // Flags for the object
-  U64 flags;
+  uint64_t flags;
 } DEBUG_OBJECT, *PDEBUG_OBJECT;
 
-VOID dbgkCreateThread(PETHREAD Thread, PVOID startAddress);
+void 
+dbgkCreateThread(PETHREAD Thread, void* startAddress);
 
-VOID dbgkExitThread(DSTATUS exitStatus);
+void
+dbgkExitThread(int32_t exitStatus);
 
-VOID dbgkExitProcess(DSTATUS exitStatus);
+void
+dbgkExitProcess(int32_t exitStatus);
 
-VOID dbgkMapViewSection(IN DHANDLE sectionHandle, IN PVOID baseAddress,
-                        IN U64 sectionOffset, IN HANDLE sectionHandle,
-                        IN PVOID baseAddress, IN ULONG sectionOffset,
-                        IN ULONGPTR viewSize);
+void
+dbgkMapViewSection(void* sectionHandle, void* baseAddress,
+                   uint64_t sectionOffset, void* sectionHandle,
+                   void* baseAddress, uint32_t sectionOffset,
+                   uint32_t viewSize);
 
-VOID dbgkUnMapViewSection(IN PVOID baseAddress);
+void
+dbgkUnMapViewSection(void* baseAddress);
 
-BOOLEAN
-dbgkForwardException(IN PEXCEPTION_RECORD exceptionRecord,
-                     IN BOOLEAN debugException, IN BOOLEAN secondChange);
+uint8_t
+dbgkForwardException(PEXCEPTION_RECORD exceptionRecord,
+                     uint8_t debugException, uint8_t secondChange);
 
-DUSTSTATUS
-dbgkInisialize(VOID);
+int32_t
+dbgkInisialize(void);
 
-VOID dbgkCopyProcessDebugPort(IN PEPROCESS targetProcess,
-                              IN PEPROCESS sourceProcess);
+void 
+dbgkCopyProcessDebugPort(PEPROCESS targetProcess,
+                         PEPROCESS sourceProcess);
 
-DUSTSTATUS
-dgbkOpenProcessDebugPort(IN PEPROCESS targetProcess,
-                         IN KPROCESSOR_MODE previousMode, OUT HANDLE *PHANDLE);
+int32_t
+dgbkOpenProcessDebugPort(PEPROCESS targetProcess,
+                         KPROCESSOR_MODE previousMode, void void*);
 
-DUSTSTATUS
-dbgkClearProcessDebugObject(IN PEPROCESS process,
-                            IN PDEBUG_OBJECT sourceDebugObject);
+int32_t
+dbgkClearProcessDebugObject(PEPROCESS process,
+                            PDEBUG_OBJECT sourceDebugObject);
 
-DUSTSTATUS
-dbgkExceptionObject(IN PEXCEPTION_RECORD exceptionRecord,
-                    IN BOOLEAN debugException, IN BOOLEAN secondChange,
-                    IN USHORT objectException);
+int32_t
+dbgkExceptionObject(PEXCEPTION_RECORD exceptionRecord,
+                    uint8_t debugException, uint8_t secondChange,
+                    uint16_t objectException);
 
 #endif // !_DBGK_
