@@ -84,7 +84,7 @@
 
 __forceinline
   PK_TRAP_FRAME PspGetTrapFrame(IN PETHREAD thread) {
-  ULONGLONG initialStack;
+  uint64_t initialStack;
   PKERNEL_STACK_CONTROL stackControl;
 
   initialStack = (ULONGLONG)thread->InitialStack;
@@ -165,26 +165,30 @@ LOGICAL
 PspCheckPrivilege(IN LUID PrivilegeVl, IN KPROCESSOR_MODE PreviousMode,
                   OUT PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext);
 
-VOID PspSinglePrivilegeCheckAudit(
-    IN LOGICAL privUsed, IN PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext);
+void PspSinglePrivilegeCheckAudit(LOGICAL privUsed,
+                                  PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext);
 
 // Private Entry Point for Object Dumping
-VOID PspProcessDump(IN PVOID object, IN POB_DUMP_CONTROL control OPTIONAL);
+void
+PspProcessDump(void* object, POB_DUMP_CONTROL control OPTIONAL);
 
-VOID PspProcessDelete(IN PVOID object);
+void
+PspProcessDelete(void* object);
 
-VOID PspProcessDeleteDump(VOID);
+void
+PspProcessDeleteDump(void);
 
-VOID PspThreadProcessDump(IN PVOID object, IN POB_DUMP_CONTROL control OPTIONAL,
-                          IN PETHREAD thread OPTIONAL);
+void
+PspThreadProcessDump(void* object, POB_DUMP_CONTROL control OPTIONAL,
+                           PETHREAD thread OPTIONAL);
 
-VOID PspInheritQuotaLimits(IN PEPROCESS newProcess, IN PEPROCESS parentProcess);
+VOID PspInheritQuotaLimits(PEPROCESS newProcess, PEPROCESS parentProcess);
 
-VOID PspDeferenceQuotaLimits(IN PEPROCESS process);
+VOID PspDeferenceQuotaLimits(PEPROCESS process);
 
 VOID PspThreadDelete(IN PVOID object, IN PETHREAD objectThread);
 
-DUSTSTATUS
+int32_t
 PspWriteTabImpersonationInfo(IN PETHREAD thread, IN PEPROCESS process,
                              IN PVOID impersonationInfo,
                              IN ULONG impersonationInfoSize,
