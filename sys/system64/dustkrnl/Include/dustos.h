@@ -8,8 +8,8 @@
 #include "init.h"
 #include "procpowr.h"
 #include "v86emul.h"
-#include <dustkrnl.h>
 #include <dustrtl.h>
+#include <dust.h>
 
 #if defined(__x86_64__)
 #include "x64.h"

@@ -31,35 +31,23 @@ KeCompactServiceTable (
 extern "C" {
 #endif
 
-UCHAR
-__inbyte (
-    IN USHORT port
-    );
+uint8_t
+__inbyte (uint16_t port);
 
-USHORT
-__inword (
-    IN USHORT port
-    );
+uint16_t
+__inword (uint16_t port);
 
-ULONG
-__inlong (
-    IN USHORT port
-    );
+uint32_t
+__inlong (uint16_t port);
 
-VOID
-__outbyte (
-    IN USHORT port
-    );
+void
+__outbyte (uint16_t port);
 
-VOID
-__outword (
-    IN USHORT port
-)
+void
+__outword (uint16_t port);
 
-VOID
-__outlong (
-    IN USHORT port
-)
+void
+__outlong (uint16_t port);
 
 
 
