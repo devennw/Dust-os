@@ -1,4 +1,4 @@
-#ifndef _PSP_
+o#ifndef _PSP_
 #define _PSP_
 
 #pragma warning(disable:4201) // nonstandard extension used : nameless struct/union
@@ -83,11 +83,11 @@
 #if defined(_AMD64_)
 
 __forceinline
-  PK_TRAP_FRAME PspGetTrapFrame(IN PETHREAD thread) {
-  ULONGLONG initialStack;
+  PK_TRAP_FRAME PspGetTrapFrame(PETHREAD thread) {
+  uint64_t initialStack;
   PKERNEL_STACK_CONTROL stackControl;
 
-  initialStack = (ULONGLONG)thread->InitialStack;
+  initialStack = (uint64_t)thread->InitialStack;
   stackControl = (PKERNEL_STACK_CONTROL)initialStack;
   do {
     initialStack = stackControl->Previous.initialStack;
@@ -103,7 +103,7 @@ __forceinline
 #elif defined(_X86_)
 
 #define PspGetBaseTrapFrame(thread)                                            \
-  (PKTRAP_FRAME)((ULONG_PTR)Thread->Tcb.initialStack -                         \
+  (PKTRAP_FRAME)((uint32_t)Thread->Tcb.initialStack -                         \
                  PSPALIGN_UP(sizeof(KTRAP_FRAME), KTRAP_FRAME_ALIGN) -         \
                  sizeof(FX_SAVE_AREA))
 #define PspGetBaseExceptionFrame(thread) (NULL)
@@ -111,9 +111,9 @@ __forceinline
 #elif defined(_ARM64_)
 
 #define PspGetBaseTrapFrame(thread)                                            \
-  (PKTRAP_FRAME)((ULONG_PTR)Thread->Tcb.initialStack -                         \
+  (PKTRAP_FRAME)((uint32_t)Thread->Tcb.initialStack -                         \
                  PSPALIGN_UP(sizeof(KTRAP_FRAME), KTRAP_FRAME_ALIGN) -         \
-                 sizeof(FX_SAVE_AREA))
+                 sizeof(FX_SAVE_AREA) + 2)
 
 #define PspGetBaseExceptionFrame(thread) (NULL)
 
@@ -162,83 +162,96 @@ typedef struct _PRIVILAGE_CHECK_CONTEXT {
 } PRIVILAGE_CHECK_CONTEXT, *PPRIVILAGE_CHECK_CONTEXT;
 
 LOGICAL
-PspCheckPrivilege(IN LUID PrivilegeVl, IN KPROCESSOR_MODE PreviousMode,
-                  OUT PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext);
+PspCheckPrivilege(LUID PrivilegeVl, KPROCESSOR_MODE PreviousMode,
+                  PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext);
 
-VOID PspSinglePrivilegeCheckAudit(
-    IN LOGICAL privUsed, IN PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext);
+void
+PspSinglePrivilegeCheckAudit(LOGICAL privUsed,
+                             PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext);
 
 // Private Entry Point for Object Dumping
-VOID PspProcessDump(IN PVOID object, IN POB_DUMP_CONTROL control OPTIONAL);
+void
+PspProcessDump(*void object, POB_DUMP_CONTROL control);
 
-VOID PspProcessDelete(IN PVOID object);
+void*
+PspProcessDelete(*void object);
 
-VOID PspProcessDeleteDump(VOID);
+void
+PspProcessDeleteDump(void);
 
-VOID PspThreadProcessDump(IN PVOID object, IN POB_DUMP_CONTROL control OPTIONAL,
-                          IN PETHREAD thread OPTIONAL);
+void
+PspThreadProcessDump(*void object, POB_DUMP_CONTROL control,
+                     PETHREAD thread);
 
-VOID PspInheritQuotaLimits(IN PEPROCESS newProcess, IN PEPROCESS parentProcess);
+void
+PspInheritQuotaLimits(PEPROCESS newProcess, PEPROCESS parentProcess);
 
-VOID PspDeferenceQuotaLimits(IN PEPROCESS process);
+void
+PspDeferenceQuotaLimits(PEPROCESS process);
 
-VOID PspThreadDelete(IN PVOID object, IN PETHREAD objectThread);
+void
+PspThreadDelete(*void object, PETHREAD objectThread);
 
-DUSTSTATUS
-PspWriteTabImpersonationInfo(IN PETHREAD thread, IN PEPROCESS process,
-                             IN PVOID impersonationInfo,
-                             IN ULONG impersonationInfoSize,
-                             OUT ULONGPTR bytesWritten);
+int32_t
+PspWriteTabImpersonationInfo(PETHREAD thread, PEPROCESS process,
+                             *void impersonationInfo,
+                             uint32_t impersonationInfoSize,
+                             uint32_t bytesWritten);
 
 // Initialization loader entry point for the process and thread subsystems
-DUSTSTATUS
-PspInitializeProcessSubsystem(IN PVOID dsaBase);
+int32_t
+PspInitializeProcessSubsystemDsa(*void dsaBase);
 
-VOID PspInitializeThreadSubsystem(IN PVOID dsaBase, IN PETHREAD thread);
+int32_t
+PspInitializedProcessSubsystemDll(*void dllBase);
 
-ULONG
-PspGetProcessSessionId(IN PEPROCESS process, OUT ULONGPTR sessionId);
+void
+PspInitializeThreadSubsystem(*void dsaBase, *void dllBase,
+                             PETHREAD thread);
 
-ULONG
-PspGetProcessSessionIdEx(IN PEPROCESS process, );
+uint32_t
+PspGetProcessSessionId(PEPROCESS process, uint32_t sessionId);
+
+uint32_t
+PspGetProcessSessionIdEx(PEPROCESS process, uint32_t sessionIdEx);
 
 // initialization and loader enrty point
-BOOLEAN
-PspLoaderInitializeProcess(IN PLOADER_PARAMETER_BLOCK LoaderBlock,
-                           IN PEPROCESS process, IN PVOID pebAddress,
-                           IN PVOID *processParameters, );
+uint8_t
+PspLoaderInitializeProcess(PLOADER_PARAMETER_BLOCK LoaderBlock,
+                           PEPROCESS process, *void pebAddress,
+                           *void *processParameters);
 
-BOOLEAN
-PspLoaderInitPhase0(IN PLOADER_PARAMETER_BLOCK loaderBlock);
+uint8_t
+PspLoaderInitPhase0(PLOADER_PARAMETER_BLOCK loaderBlock);
 
-BOOLEAN
-PspLoaderInitPhase1(IN PLOADER_PARAMETER_BLOCK loaderBlock);
+uint8_t
+PspLoaderInitPhase1(PLOADER_PARAMETER_BLOCK loaderBlock);
 
-DUSTSTATUS
-PspInitializeSystemDsa(VOID);
+int32_t
+PspInitializeSystemDsa(void);
 
-DUSTSTATUS
-PspInitiasizeSystemDsaEntryPoint(IN PSZ entryPointName,
-                                 IN PVOID *entryPointAddress);
+int32_t
+PspInitiasizeSystemDsaEntryPoint(PSZ entryPointName,
+                                 *void *entryPointAddress);
 
-DUSTSTATUS
-PspLookupKernelEntryPoint(VOID);
+int32_t
+PspLookupKernelEntryPoint(void);
 
-USHORT
-PspNameForOrdinal(IN PSZ entryPoint, IN ULONG dsaBase, IN ULONG numberToName,
-                  IN PULONG nameTableBase, IN PUSHORT ordinalNumber);
+uint16_t
+PspNameForOrdinal(PSZ entryPoint, uint32_t dsaBase, uint32_t numberToName,
+                  *uint32_t nameTableBase, *uint16_t ordinalNumber);
 
-USHORT
-PspOrdinalEntryPoint(IN PVOID ordinalEntryPoint, IN PUSHORT ordinalNumber,
-                     IN PULONG nameTableBase);
+uint16_t
+PspOrdinalEntryPoint(*void ordinalEntryPoint, *uint16_t ordinalNumber,
+                     *uint32_t nameTableBase);
 
 /* Internal Creation Function */
-DUSTSTATUS
-PspCreateProcess(OUT PHANDLE processHandle, IN ACCSES_MASK accsessDesired,
-                 IN POBJECT_ATTRIBUTES objectAttributes,
-                 IN HANDLE parentProcess, IN ULONG flags,
-                 IN HANDLE sectionHandle OPTIONAL, IN HANDLE debugPort OPTIONAL,
-                 IN HANDLE exceptionPort, IN ULONG jobMemberLevel);
+int32_t
+PspCreateProcess(*void processHandle, ACCSES_MASK accsessDesired,
+                 POBJECT_ATTRIBUTES objectAttributes,
+                 *void parentProcess, uint32_t flags,
+                 *void sectionHandle, *void debugPort,
+                 *void exceptionPort, uint32_t jobMemberLevel);
 
 #define PSP_CREATE_MAX_PROCESS_NOTIFY 12
 #define PSP_CREATE_MIN_PROCESS_NOTIFY 6
@@ -247,7 +260,7 @@ PspCreateProcess(OUT PHANDLE processHandle, IN ACCSES_MASK accsessDesired,
 // Define process callouts. These are of type PCREATE_PROCESS_NOTIFY_ROUTINE
 // Called on process create and delete.
 //
-ULONG
+uint32_t
 PspCreateProcessNotifyRoutineCount;
 
 EX_CALLBACK
@@ -259,7 +272,7 @@ PspCreateProcessNotifyRoutine[PSP_MAX_CREATE_PROCESS_NOTIFY];
 // Define process callouts. These are of type PCREATE_PROCESS_NOTIFY_ROUTINE
 // Called on process create and delete.
 //
-ULONG
+uint32_t
 PspCreateMinProcessNotifyRoutineCount;
 
 EX_CALLBACK
@@ -271,9 +284,10 @@ PspCreateMinProcessNotifyRoutineCount[PSP_CREATE_MIN_PROCESS_NOTIFY]
 // Define image load callbacks. These are of type PLOAD_IMAGE_NOTIFY_ROUTINE
 // Called on image load.
 //
-ULONG PspLoadImageNotifyRoutineCount;
+uint32_t
+PspLoadImageNotifyRoutineCount;
 
-ULONG
+uint32_t
 PspLoadMinImageNotifyRoutineCount;
 
 EX_CALLBACK
@@ -282,29 +296,32 @@ PspLoadImageNotifyRoutine[PSP_LOAD_MAX_IMAGE_NOTIFY];
 EX_CALLBACK
 PspLoadMinImageNotifyRoutine[PSP_LOAD_MIN_IMAGE_NOTIFY];
 
-DUSTSTATUS
-PspCreatethread(OUT PHANDLE ThreadHandle, IN ACCESS_MASK DesiredAccess,
-                IN POBJECT_ATTRIBUTES ObjectAttributes OPTIONAL,
-                IN HANDLE ProcessHandle, IN PEPROCESS ProcessPointer,
-                OUT PCLIENT_ID ClientId OPTIONAL, IN PCONTEXT ThreadContext,
-                IN PINITIAL_TEB InitialTeb OPTIONAL, IN BOOLEAN CreateSuspended,
-                IN PKSTART_ROUTINE StartRoutine OPTIONAL, IN PVOID StartContext)
+int32_t
+PspCreatethread(*void ThreadHandle, ACCESS_MASK DesiredAccess,
+                POBJECT_ATTRIBUTES ObjectAttributes,
+                *void ProcessHandle, PEPROCESS ProcessPointer,
+                PCLIENT_ID ClientId , PCONTEXT ThreadContext,
+                PINITIAL_TEB InitialTeb, uint8_t CreateSuspended,
+                PKSTART_ROUTINE StartRoutine, *void StartContext)
 
 /* starup routine */
-VOID PspTheadUserStarup(IN PKSTART_ROUTINE startRoutine,
-                        IN PVOID startContext);
+void
+PspTheadUserStarup(PKSTART_ROUTINE startRoutine,
+                   *void startContext);
 
-VOID PspThreadSystemStartup(IN PKSTART_ROUTINE startRoutine,
-                            IN PVOID startContext);
+void
+PspThreadSystemStartup(PKSTART_ROUTINE startRoutine,
+                       *void startContext);
 
-VOID PspReaper(IN PVOID startContext);
+void
+PspReaper(*void startContext);
 
 /*++
 --*/
-VOID PspThreadStartup(OUT HANDLE threadProcess, IN PETHREAD thread,
-                      IN PVOID startContext, IN PKSTART_ROUTINE startRoutine,
-                      IN PCONTEXT threadContext OPTIONAL,
-                      IN ULONG threadStart OPTIONAL);
+void
+PspThreadStartup(*void threadProcess, PETHREAD thread,
+                 *void startContext, PKSTART_ROUTINE startRoutine,
+                 PCONTEXT threadContext, uint32_t threadStart);
 
 VOID PspThreadUserStartup(IN PKSTART_ROUTINE startRoutine,
                           IN PVOID startContext, IN PETHREAD threadStartup,
