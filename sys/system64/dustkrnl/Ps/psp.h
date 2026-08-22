@@ -83,8 +83,8 @@ o#ifndef _PSP_
 #if defined(_AMD64_)
 
 __forceinline
-  PK_TRAP_FRAME PspGetTrapFrame(PETHREAD thread) {
-  uint64_t initialStack;
+  PK_TRAP_FRAME PspGetTrapFrame(IN PETHREAD thread) {
+  ULONGLONG initialStack;
   PKERNEL_STACK_CONTROL stackControl;
 
   initialStack = (uint64_t)thread->InitialStack;
@@ -165,38 +165,32 @@ LOGICAL
 PspCheckPrivilege(LUID PrivilegeVl, KPROCESSOR_MODE PreviousMode,
                   PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext);
 
-void
-PspSinglePrivilegeCheckAudit(LOGICAL privUsed,
-                             PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext);
+VOID PspSinglePrivilegeCheckAudit(
+    IN LOGICAL privUsed, IN PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext);
 
 // Private Entry Point for Object Dumping
-void
-PspProcessDump(*void object, POB_DUMP_CONTROL control);
+VOID PspProcessDump(IN PVOID object, IN POB_DUMP_CONTROL control OPTIONAL);
 
-void*
-PspProcessDelete(*void object);
+VOID PspProcessDelete(IN PVOID object);
 
 void
 PspProcessDeleteDump(void);
 
-void
-PspThreadProcessDump(*void object, POB_DUMP_CONTROL control,
-                     PETHREAD thread);
+VOID PspThreadProcessDump(IN PVOID object, IN POB_DUMP_CONTROL control OPTIONAL,
+                          IN PETHREAD thread OPTIONAL);
 
-void
-PspInheritQuotaLimits(PEPROCESS newProcess, PEPROCESS parentProcess);
+VOID PspInheritQuotaLimits(IN PEPROCESS newProcess, IN PEPROCESS parentProcess);
 
-void
-PspDeferenceQuotaLimits(PEPROCESS process);
+VOID PspDeferenceQuotaLimits(IN PEPROCESS process);
 
 void
 PspThreadDelete(*void object, PETHREAD objectThread);
 
-int32_t
-PspWriteTabImpersonationInfo(PETHREAD thread, PEPROCESS process,
-                             *void impersonationInfo,
-                             uint32_t impersonationInfoSize,
-                             uint32_t bytesWritten);
+DUSTSTATUS
+PspWriteTabImpersonationInfo(IN PETHREAD thread, IN PEPROCESS process,
+                             IN PVOID impersonationInfo,
+                             IN ULONG impersonationInfoSize,
+                             OUT ULONGPTR bytesWritten);
 
 // Initialization loader entry point for the process and thread subsystems
 int32_t
