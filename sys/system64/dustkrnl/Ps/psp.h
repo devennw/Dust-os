@@ -84,7 +84,7 @@
 
 __forceinline
   PK_TRAP_FRAME PspGetTrapFrame(IN PETHREAD thread) {
-  ULONGLONG initialStack;
+  uint64_t initialStack;
   PKERNEL_STACK_CONTROL stackControl;
 
   initialStack = (uint64_t)thread->InitialStack;
