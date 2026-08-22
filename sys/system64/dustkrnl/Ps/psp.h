@@ -7,7 +7,6 @@
 #pragma warning(disable:4514) // unreferenced inline function has been removed
 #pragma warning(disable:4702) // unreachable code
 #pragma warning(disable:4820) // padding added after data member
-
 #pragma warning(disable:4054) // Cast of function pointer to PVOID
 #pragma warning(disable:4055) // Cast of function pointer
 #pragma warning(disable:4115) // named type definition in parentheses
@@ -75,10 +74,10 @@
 //
 // Define routines to get trap and exception frame addresses
 //
-#define PS_ALIGN_DOWN(address, amt) ((ULONG_PTR)(address) & ~((amt) - 1))
+#define PS_ALIGN_DOWN(address, amt) ((uint32_t)(address) & ~((amt) - 1))
 
 #define PS_ALIGN_UP(address, amt)                                              \
-  (((ULONG_PTR)(address) + ((amt) - 1)) & ~((amt) - 1))
+  (((uint32_t)(address) + ((amt) - 1)) & ~((amt) - 1))
 
 #if defined(_AMD64_)
 
@@ -130,9 +129,9 @@ typedef struct _GET_SET_CONTEXT {
 } GET_SET_CONTEXT, *PGET_SET_CONTEXT;
 
 typedef struct _SYSTEM_DSA {
-  PVOID section;
-  PVOID DsaBase;
-  PVOID DllBase;
+  *void section;
+  *void DsaBase;
+  *void DllBase;
   PKNORMAL_ROUTINE loaderNormalInitRoutine;
   EX_PUSH_LOCK DsaLock;
   EX_PUSH_LOCK DllLock;
@@ -141,8 +140,8 @@ typedef struct _SYSTEM_DSA {
 typedef struct _JOB_WORKING_SET_CHANGE_HEAD {
   LIST_ENTRY links;
   KGUARD_MUTEX lock;
-  SIZE_T minimumWorkingSetSize;
-  SIZE_T maximumWorkingSetSize;
+  size_t minimumWorkingSetSize;
+  size_t maximumWorkingSetSize;
 } JOB_WORKING_SET_CHANGE_HEAD, *PJOB_WORKING_SET_CHANGE_HEAD;
 
 typedef struct _JOB_WORKING_SET_CHANGE_RECORD {
@@ -157,40 +156,46 @@ typedef struct _PRIVILAGE_CHECK_CONTEXT {
   PRIVILEGE_SET requiredPrivileges;
   PETHREAD Thread;
   KPROCESSOR_MODE PreviousMode;
-  ULONG PrivilegeCount;
-  BOOLEAN AccessGranted;
+  uint32_t PrivilegeCount;
+  uint8_t AccessGranted;
 } PRIVILAGE_CHECK_CONTEXT, *PPRIVILAGE_CHECK_CONTEXT;
 
 LOGICAL
 PspCheckPrivilege(LUID PrivilegeVl, KPROCESSOR_MODE PreviousMode,
                   PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext);
 
-VOID PspSinglePrivilegeCheckAudit(
-    IN LOGICAL privUsed, IN PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext);
+void
+PspSinglePrivilegeCheckAudit(LOGICAL privUsed,
+                             PPRIVILAGE_CHECK_CONTEXT PrivilegeCheckContext);
 
 // Private Entry Point for Object Dumping
-VOID PspProcessDump(IN PVOID object, IN POB_DUMP_CONTROL control OPTIONAL);
+void
+PspProcessDump(*void object, POB_DUMP_CONTROL control);
 
-VOID PspProcessDelete(IN PVOID object);
+void
+PspProcessDelete(*void object);
 
 void
 PspProcessDeleteDump(void);
 
-VOID PspThreadProcessDump(IN PVOID object, IN POB_DUMP_CONTROL control OPTIONAL,
-                          IN PETHREAD thread OPTIONAL);
+void
+PspThreadProcessDump(*void object, POB_DUMP_CONTROL control,
+                     PETHREAD thread);
 
-VOID PspInheritQuotaLimits(IN PEPROCESS newProcess, IN PEPROCESS parentProcess);
+void
+PspInheritQuotaLimits(PEPROCESS newProcess, PEPROCESS parentProcess);
 
-VOID PspDeferenceQuotaLimits(IN PEPROCESS process);
+void
+PspDeferenceQuotaLimits(PEPROCESS process);
 
 void
 PspThreadDelete(*void object, PETHREAD objectThread);
 
-DUSTSTATUS
-PspWriteTabImpersonationInfo(IN PETHREAD thread, IN PEPROCESS process,
-                             IN PVOID impersonationInfo,
-                             IN ULONG impersonationInfoSize,
-                             OUT ULONGPTR bytesWritten);
+int32_t
+PspWriteTabImpersonationInfo(PETHREAD thread, PEPROCESS process,
+                             *void impersonationInfo,
+                             uint32_t impersonationInfoSize,
+                             uint32_t bytesWritten);
 
 // Initialization loader entry point for the process and thread subsystems
 int32_t
@@ -317,126 +322,136 @@ PspThreadStartup(*void threadProcess, PETHREAD thread,
                  *void startContext, PKSTART_ROUTINE startRoutine,
                  PCONTEXT threadContext, uint32_t threadStart);
 
-VOID PspThreadUserStartup(IN PKSTART_ROUTINE startRoutine,
-                          IN PVOID startContext, IN PETHREAD threadStartup,
-                          IN DUSTSTATUS userStartup);
+void
+PspThreadUserStartup(PKSTART_ROUTINE startRoutine,
+                     *void startContext, PETHREAD threadStartup,
+                     int32_t userStartup);
 
-DUSTSTATUS
-PspThreadRunning(IN PETHREAD thread, IN PHANDLE threadHandle,
-                 IN DUSTSTATUS systemStartup,
-                 OUT PETHREAD *threadPointer OPTIONAL);
+int32_t
+PspThreadRunning(PETHREAD thread, *void threadHandle,
+                 int32_t systemStartup, PETHREAD *threadPointer);
 
 /* thread exit support */
-VOID PspExitApcRundownThread(IN PKAPC apc);
+void
+PspExitApcRundownThread(PKAPC apc);
 
-VOID PspExitThreadSystem(IN DUSTSTATUS exitStatus);
+void
+PspExitThreadSystem(int32_t exitStatus);
 
-VOID PspThreadTerminateByPointer(IN PETHREAD thread, IN DUSTSTATUS exitStatus,
-                                 IN BOOLEAN DirectTerminate);
+void
+PspThreadTerminateByPointer(PETHREAD thread, int32_t exitStatus,
+                            uint8_t DirectTerminate);
 
 /* system inialize runtime */
-VOID PspRuntimeInialize(IN PVOID priviousMode, IN HANLDE runtimeHandle,
-                        OUT DUSTSTATUS systemStartup OPTIONAL,
-                        IN PETHREAD thread, IN BOOLEAN createdSuspended);
+void
+PspRuntimeInialize(*void priviousMode, *void runtimeHandle,
+                   int32_t systemStartup, PETHREAD thread,
+                   uint8_t createdSuspended);
 
-VOID PspSystemRuntime(IN ULONG runtimeStart, IN HANDLE runtimeHandle);
+void
+PspSystemRuntime(uint32_t runtimeStart, *void runtimeHandle);
 
 /* context menegement */
-VOID PspContextSet(OUT PKTRAP_FRAME trapFrame, IN PVOID context,
-                   IN CONTEXT_POINTERS contextNonVolatile,
-                   IN CONTEXT_POINTERS contextVolatile, IN PCONTEXT context,
-                   IN KPROCESSOR_MODE previousMode);
+void
+PspContextSet(PKTRAP_FRAME trapFrame, *void context,
+              CONTEXT_POINTERS contextNonVolatile,
+              CONTEXT_POINTERS contextVolatile, PCONTEXT context,
+              KPROCESSOR_MODE previousMode);
 
-VOID PspGetContext(IN PKTRAP_FRAME trapframe,
-                   IN PKNONVOLATILE_CONTEXT contextNonVolatile,
-                   IN OUT PCONTEXT context,
-                   IN OUT KPROCESSOR_MODE previousMode OPTIONAL);
+void
+PspGetContext(PKTRAP_FRAME trapframe,
+              PKNONVOLATILE_CONTEXT contextNonVolatile,
+              PCONTEXT context,
+              KPROCESSOR_MODE previousMode);
 
-VOID PspSetGetSpesialContextApc(IN PKAPC apc,
-                                IN PKSTART_ROUTINE startRoutine OPTIONAL,
-                                IN OUT PKNORMAL_ROUTINE *normalRoutine,
-                                IN OUT PVOID *normalContext,
-                                IN OUT PVOID *systemArgument1,
-                                IN OUT PVOID *systemArgument2);
+void
+PspSetGetSpesialContextApc(PKAPC apc,
+                           PKSTART_ROUTINE startRoutine,
+                           PKNORMAL_ROUTINE *normalRoutine,
+                           *void *normalContext,
+                           *void *systemArgument1,
+                           *void *systemArgument2);
 
-VOID PspExitNormalRoutineApc(IN PVOID NormalContext, IN PVOID systemArgument1,
-                             IN PVOID systemArgument2,
-                             IN DUSTSTATUS exitStatus);
+void PspExitNormalRoutineApc(*void NormalContext, *void systemArgument1,
+                             *void systemArgument2,
+                             int32_t exitStatus);
 
 /* private security routine */
-DUSTSTATUS
-PspInializedSecurityProcess(IN PEPROCESS child, IN PEPROCESS parent OPTIONAL);
+int32_t
+PspInializedSecurityProcess(PEPROCESS child, PEPROCESS parent);
 
-VOID PspDeleteSecurityProcess(IN PEPROCESS process);
+void
+PspDeleteSecurityProcess(PEPROCESS process);
 
-VOID PspInializedThreadProcess(IN PETHREAD thread, IN PEPROCESS process);
+void
+PspInializedThreadProcess(PETHREAD thread, PEPROCESS process);
 
-VOID PspDeleteThreadProcess(IN PETHREAD thread);
+void
+PspDeleteThreadProcess(PETHREAD thread);
 
-DUSTSTATUS
-PspTokenPrimaryAssign(IN PEPROCESS process, IN PHANDLE tokenHandle,
-                      IN HANDLE token, IN PACCES_TOKEN tokenPointer OPTIONAL);
+int32_t
+PspTokenPrimaryAssign(PEPROCESS process, *void tokenHandle,
+                      *void token, PACCES_TOKEN tokenPointer);
 
-DUSTSTATUS
-PspSetTokenPrimary(IN HANDLE processHandle,
-                   IN PEPROCESS processPointer OPTIONAL, IN PHANDLE tokenHandle,
-                   IN HANDLE token, IN PACCES_TOKEN tokenPointer OPTIONAL,
-                   IN BOOLEAN privilageChacked)
+int32_t
+PspSetTokenPrimary(*void processHandle, PEPROCESS processPointer,
+                   *void tokenHandle, *void token,
+                   PACCES_TOKEN tokenPointer, uint8_t privilageChacked);
 
 /* ltd support routine */
 #if defined(i386)
-DUSTSTATUS PspLtdSupportRoutine();
+int32_t PspLtdSupportRoutine();
 #endif
 
 /* Vdm support routine */
 #if defined(i386)
-DUSTSTATUS PspVdmSupportRoutine();
+int32_t PspVdmSupportRoutine();
 #endif
 
-DUSTSTATUS
-PspQueryLtdInformation(IN PEPROCESS process, OUT PVOID ltdInformation,
-                       IN ULONG lengthLtdInformation, OUT PULONG returnLength);
+int32_t
+PspQueryLtdInformation(PEPROCESS process, *void ltdInformation,
+                       uint32_t lengthLtdInformation, *uint32_t returnLength);
 
-DUSTSTATUS
-PspSetLtdQuery(IN PEPROCESS process, IN PVOID ltdQuery,
-               IN ULONG LtdQueryLength);
+int32_t
+PspSetLtdQuery(PEPROCESS process, *void ltdQuery,
+               uint32_t LtdQueryLength);
 
-DUSTSTATUS
-PspSetLtdInformation(IN PEPROCESS process, IN PVOID ltdInformation,
-                     IN ULONG lengthLtdInformation);
+int32_t
+PspSetLtdInformation(PEPROCESS process, *void ltdInformation,
+                     uint32_t lengthLtdInformation);
 
-DUSTSTATUS
-PspSetLtdSize(IN PEPROCESS process, IN PVOID ltdsSize,
-              IN ULONG LtdSizeLength);
+int32_t
+PspSetLtdSize(PEPROCESS process, *void ltdsSize,
+              uint32_t LtdSizeLength);
 
-VOID
-PspDeleteProcessLtd(IN PEPROCESS process);
+void
+PspDeleteProcessLtd(PEPROCESS process);
 
 /* Io handleing support routine */
-DUSTSTATUS
-PspSetProcessHandleIo(IN PEPROCESS process, IN PVOID ioHandleInformation,
-    IN ULONG HandleIoLength);
+int32_t
+PspSetProcessHandleIo(PEPROCESS process, *void ioHandleInformation,
+                      uint32_t HandleIoLength);
 
-VOID PspDeleteObjectVdm(IN PEPROCESS process);
+void
+PspDeleteObjectVdm(PEPROCESS process);
 
-DUSTSTATUS
-PspDescriptorThreadQuery(IN PEPROCESS process, IN PETHREAD thread,
-                         IN PVOID threadInformation ,IN ULONG threadInformationLength,
-                         IN PULONG returnLength);
+int32_t
+PspDescriptorThreadQuery(PEPROCESS process, PETHREAD thread,
+                         *void threadInformation, uint32_t threadInformationLength,
+                         *uint32_t returnLength);
 
 /* object dir support routine */
-DUSTSTATUS
-PspSetProcessObjectDir(IN PEPROCESS process, IN PVOID objectDirSize,
-                       IN ULONG objectDirSizeLength,
-                       IN HANDLE objectHandle);
+int32_t
+PspSetProcessObjectDir(PEPROCESS process, *void objectDirSize,
+                       uint32_t objectDirSizeLength, *void objectHandle);
 
-DUSTSTATUS
-PspDescriptorObjectQuery(IN PEPROCESS process, IN PVOID object,
-                         IN PVOID objectDirInformation,
-                         IN ULONG objectDirInformationLength,
-                         IN PULONG returnObjectLength);
+int32_t
+PspDescriptorObjectQuery(PEPROCESS process, *void object,
+                         *void objectDirInformation,
+                         uint32_t objectDirInformationLength,
+                         *uint32_t returnObjectLength);
 
-VOID PspDeleteProcessObject(IN PEPROCESS process);
+VOID PspDeleteProcessObject(PEPROCESS process);
 
 /* Job object support routine */
 
@@ -445,25 +460,26 @@ VOID PspDeleteProcessObject(IN PEPROCESS process);
 
 /* global data */
 extern PHANDLE_TABLE PspCidTable;
-extern HANDLE PspInitialSystemProcessHandle;
+extern *void PspInitialSystemProcessHandle;
 extern PACCESS_TOKEN PspBootAccessToken;
-extern SYSTEM_DLL PspSystemDsa;
+extern SYSTEM_DLL PspSystemDll;
+extern SYSTEM_DSA PspSystemDsa;
 extern PETHREAD PspShutdownThread;
 
-extern ULONG PspDefaultPagedLimit;
-extern ULONG PspDefaultNonPagedLimit;
-extern ULONG PspDefaultPagefileLimit;
-extern ULONG PsMinimumWorkingSet;
+extern uint32_t PspDefaultPagedLimit;
+extern uint32_t PspDefaultNonPagedLimit;
+extern uint32_t PspDefaultPagefileLimit;
+extern uint32_t PsMinimumWorkingSet;
 
 extern EPROCESS_QUOTA_BLOCK PspDefaultQuotaBlock;
-extern BOOLEAN PspDoingGiveBacks;
+extern uint8_t PspDoingGiveBacks;
 
 extern PKDUST64_PROCESS_CALLOUT PspD64ProcessCallout;
 extern PKDUST64_THREAD_CALLOUT PspD64ThreadCallout;
 extern PKDUST64_JOB_CALLOUT PspD64JobCallout;
-extern ULONG PspD64ProcessSize;
-extern ULONG PspD64ThreadSize;
-extern SCHAR PspForegroundQuantum[3];
+extern uint32_t PspD64ProcessSize;
+extern uint32_t PspD64ThreadSize;
+extern int8_t PspForegroundQuantum[3];
 
 #define PSP_NUMBER_OF_SCHEDULING_CLASSES 16
 #define PSP_DEFAULT_SCHEDULING_CLASSES 8
