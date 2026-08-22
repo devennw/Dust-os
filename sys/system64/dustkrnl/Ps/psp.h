@@ -1,4 +1,4 @@
-o#ifndef _PSP_
+#ifndef _PSP_
 #define _PSP_
 
 #pragma warning(disable:4201) // nonstandard extension used : nameless struct/union
